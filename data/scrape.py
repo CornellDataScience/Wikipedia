@@ -29,8 +29,8 @@ def read_desc(page):
                 desc_text += str(p.getText().encode('utf-8', 'ignore'))
                 for a in p.find_all('a'):
                     if a['href'][:6] == "/wiki/": links.append(a['href'])
-        filter(visible, desc_text)
-        file_name="beyonce_desc.txt"
+        filter(visible,desc_text)
+        file_name="evals_text.txt"
         myFile = open(file_name, 'a')
         myFile.write(title)
         myFile.write(desc_text + "\n")
@@ -44,30 +44,38 @@ def read_page(page):
     #if depth == -1: return
     print("reading page: " + page)
     page1 = requests.get(page)
+    full_text = ""
+    links=[]
+    title=""
     try:
         soup = bs4(page1.text, "html5lib")
         text = soup.find_all('p')
-        full_text = ""
-        links=[]
+        #extract text only before the "see also" section
+        see_also = soup.find('span', id='See_also')
         title = soup.find('h1').getText() + "\n"
-        for t in text:
+        for p in see_also.parent.previous_siblings:
+            if p.name == 'p':
+                full_text += str(p.getText().encode('utf-8', 'ignore'))
+                for a in p.find_all('a'):
+                    if a['href'][:6] == "/wiki/": links.append(a['href'])
+        """for t in text:
             alt = t.find('img')
             if not alt:
                 full_text += str(t.getText().encode('utf-8', 'ignore'))
         text = soup.find("div",{"class": "mw-parser-output"})
         for a in text.find_all(href=True):
-            if a['href'][:6] == "/wiki/": links.append(a['href'])
+            if a['href'][:6] == "/wiki/": links.append(a['href'])"""
     except AttributeError:
         print("invalid page, skipping")
-    filter(full_text, visible)
-    file_name="linalg.txt"
+    filter(visible,full_text)
+    file_name="linalg_text3.txt"
     myFile = open(file_name, 'a')
     myFile.write(title)
     myFile.write(full_text)
     return links
 
 #read every link in the topic content
-def read_links(page):
+def read_links(page, name):
     #if depth == -1: return
     print("reading page: " + page)
     page1 = requests.get(page)
@@ -82,7 +90,7 @@ def read_links(page):
         #myFile.write(title)
         text = soup.find("div",{"class": "mw-parser-output"})
         link = ""
-        with open('page.csv', 'a', newline='') as csvfile:
+        with open('page.csv', 'w', newline='') as csvfile:
             fieldnames = ['origin_link', 'outgoing_link']
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             writer.writeheader()
@@ -98,7 +106,7 @@ def read_links(page):
     #print(title + "\n" + full_text)
     #return full_text
     #file_name = "page" + str(depth)  + str(i)+".csv
-    
+
 def make_network(page, depth):
     if(page[-3:] != "svg"):
         if depth == 0:
@@ -116,18 +124,14 @@ if __name__ == '__main__':
     #links = read_links("https://en.wikipedia.org/wiki/Linear_algebra")
     #make_network("https://en.wikipedia.org/wiki/Linear_algebra", 2)
     #confirming that links written correctly
-    links = read_desc("https://en.wikipedia.org/wiki/Linear_algebra")
+    links = read_page("https://en.wikipedia.org/wiki/Linear_algebra")
     links_2 = []
     for i in links:
-        links_2 = read_desc(STEM+i)
+        links_2 = read_page(STEM+i)
         for j in links_2:
-            read_desc(STEM+j)
+            read_page(STEM+j)
     """with open('page.csv', 'r', newline='') as csvfile:
         fieldnames = ['origin_link', 'outgoing_link']
         reader = csv.DictReader(csvfile, fieldnames=fieldnames)    #for i in links:
         for row in reader:
             print(row['origin_link'] +" " + row['outgoing_link'])"""
-
-    #    links_2.append(read_page(STEM + i))
-    #print(links_2)
-    #read_desc()
