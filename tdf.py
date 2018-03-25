@@ -34,7 +34,7 @@ def tdf(doc_name, num_clusters):
     docs = re.sub(r"b'", "", docs)
     docs = re.sub(r'\w*\d\w*', '', docs).split('\n')
     titles = [docs[i] for i in range(len(docs)) if i % 2 == 0]
-    docs = [docs[i] for i in range(len(docs)) if i % 2 == 1]
+    docs = [docs[i] for i in range(len(docs)) if i % 2 == 1] # Split titles and contents
 
     stopwords = nltk.corpus.stopwords.words('english')
 
@@ -51,8 +51,8 @@ def tdf(doc_name, num_clusters):
     tfidf_vectorizer = TfidfVectorizer(max_df=0.8, max_features=200000,
                                  min_df=0.1, stop_words= stopwords, analyzer = 'word', 
                                  use_idf=True, tokenizer=tokenize_and_stem, ngram_range=(1,3))
-    tfidf_matrix = tfidf_vectorizer.fit_transform(docs)
-    terms = tfidf_vectorizer.get_feature_names()
+    tfidf_matrix = tfidf_vectorizer.fit_transform(docs) # Generating term-frequency-inverse-document-frequency matrix
+    terms = tfidf_vectorizer.get_feature_names() # Get all the key features across documents
     km = KMeans(n_clusters=num_clusters, random_state = 1)
     km.fit(tfidf_matrix)
     clusters = km.labels_.tolist()
