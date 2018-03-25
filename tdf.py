@@ -9,10 +9,8 @@ from nltk.stem.snowball import SnowballStemmer
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 def tokenize_and_stem(text):
-    # first tokenize by sentence, then by word to ensure that punctuation is caught as it's own token
     tokens = [word for sent in nltk.sent_tokenize(text) for word in nltk.word_tokenize(sent)]
     filtered_tokens = []
-    # filter out any tokens not containing letters (e.g., numeric tokens, raw punctuation)
     for token in tokens:
         if re.search('[a-zA-Z]', token):
             filtered_tokens.append(token)
@@ -22,10 +20,8 @@ def tokenize_and_stem(text):
 
 
 def tokenize_only(text):
-    # first tokenize by sentence, then by word to ensure that punctuation is caught as it's own token
     tokens = [word.lower() for sent in nltk.sent_tokenize(text) for word in nltk.word_tokenize(sent)]
     filtered_tokens = []
-    # filter out any tokens not containing letters (e.g., numeric tokens, raw punctuation)
     for token in tokens:
         if re.search('[a-zA-Z]', token):
             filtered_tokens.append(token)
@@ -38,7 +34,7 @@ def tdf(doc_name, num_clusters):
     docs = re.sub(r"b'", "", docs)
     docs = re.sub(r'\w*\d\w*', '', docs).split('\n')
     titles = [docs[i] for i in range(len(docs)) if i % 2 == 0]
-    docs = [docs[i] for i in range(len(docs)) if i % 2 == 1]
+    docs = [docs[i] for i in range(len(docs)) if i % 2 == 1] # Split titles and contents
 
     stopwords = nltk.corpus.stopwords.words('english')
 
@@ -55,8 +51,8 @@ def tdf(doc_name, num_clusters):
     tfidf_vectorizer = TfidfVectorizer(max_df=0.8, max_features=200000,
                                  min_df=0.1, stop_words= stopwords, analyzer = 'word', 
                                  use_idf=True, tokenizer=tokenize_and_stem, ngram_range=(1,3))
-    tfidf_matrix = tfidf_vectorizer.fit_transform(docs)
-    terms = tfidf_vectorizer.get_feature_names()
+    tfidf_matrix = tfidf_vectorizer.fit_transform(docs) # Generating term-frequency-inverse-document-frequency matrix
+    terms = tfidf_vectorizer.get_feature_names() # Get all the key features across documents
     km = KMeans(n_clusters=num_clusters, random_state = 1)
     km.fit(tfidf_matrix)
     clusters = km.labels_.tolist()
