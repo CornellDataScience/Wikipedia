@@ -65,7 +65,7 @@ def read_links(page):
                 if link[:6] == "/wiki/" and link[-3:] != "svg":
                     link = STEM + link
                     links.append(link)
-                    print(link)
+                    #print(link)
                     txtfile.write(link  + '\n')
 
         # with open('page.csv', 'a', newline='') as csvfile:
