@@ -44,6 +44,39 @@ def read_page(page):
     page_dict = {'title': title, 'url': page, 'links': links, 'text': full_text}
     return page_dict
 
+def read_page_desc_links(page):
+    print("reading page: " + page)
+    page1 = requests.get(page)
+    full_text = ""
+    links=[]
+    desc_links = []
+    title=""
+    try:
+        soup = bs4(page1.text, "html5lib")
+        text = soup.find_all('p')
+        #extract text only before the "see also" section
+        see_also = soup.find('span', id='See_also')
+        title = str(soup.find('h1').getText())
+        toc = soup.find("div", {"class": "toc"})
+        for p in see_also.parent.previous_siblings:
+            alt = p.find('img')
+            if not alt and p.name == 'p':
+                full_text += str(p.getText())#.encode('utf-8', 'ignore'))
+            for a in p.find_all('a'):
+                    if a['href'][:6] == "/wiki/": links.append(a['href'])
+        #pull linsk only from the description
+        for p in toc.previous_siblings:
+            if p.name == "p":
+                for a in p.find_all('a'):
+                    if a['href'][:6] == "/wiki/": desc_links.append(a['href'])
+    except AttributeError:
+        print("invalid page, skipping")
+    except KeyError: 
+        print("key error")
+    filter(visible,full_text)
+    page_dict = {'title': title, 'url': page, 'links': links, 'text': full_text, 'desc_links': desc_links}
+    return page_dict
+
 def desc_1(root_page):
     data = {}
     data['pages'] = [] #nested array so can append new pages as needed
@@ -52,9 +85,32 @@ def desc_1(root_page):
     for l in origin_links:
         data['pages'].append(read_page(STEM + l))
     rt = data['pages'][0]['title']
-    with open(rt + ".json", 'w') as f: 
+    with open(rt + "_1.json", 'w') as f: 
         json.dump(data, f,sort_keys=True, indent=4)
+
+#read descriptions at depth 2
+#will only pull links from the intro paragraph to avoid pulling inordinate amounts of data
+def desc_2(root_page):
+    data = {}
+    data['pages'] = [] #nested array so can append new pages as needed
+    data['pages'].append(read_page_desc_links(root_page))
+    origin_links = data['pages'][0]['desc_links']
+    for l in origin_links:
+        data['pages'].append(read_page_desc_links(STEM + l))
+    rt = data['pages'][0]['title']
+    data_2 = {}
+    data_2['pages'] = []
+    for i in range(1, len(data['pages'])):
+        p = data['pages'][i]
+        for l in p['desc_links']:
+        #print(p['url'])
+            data_2['pages'].append(read_page(STEM + l))# this making it depth 3, not 2!
     
 if __name__ == '__main__':
-    root_page = str(sys.argv[1])
-    desc_1(root_page)
+    root_page = str(sys.argv[2])
+    depth = int(sys.argv[1])
+    print(depth)
+    print(root_page)
+    if depth == 1: desc_1(root_page)
+    elif depth == 2: desc_2(root_page)
+    
