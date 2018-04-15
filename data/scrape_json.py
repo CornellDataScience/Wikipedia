@@ -16,35 +16,9 @@ def visible(element):
     return True
 
 #build the json entry for a singular page
+#build the json entry for a singular page
 def read_page(page):
     #if depth == -1: return
-    print("reading page: " + page)
-    page1 = requests.get(page)
-    full_text = ""
-    links=[]
-    title=""
-    try:
-        soup = bs4(page1.text, "html5lib")
-        text = soup.find_all('p')
-        #extract text only before the "see also" section
-        see_also = soup.find('span', id='See_also')
-        title = str(soup.find('h1').getText())
-        for p in see_also.parent.previous_siblings:
-            alt = p.find('img')
-            if not alt and p.name == 'p':
-                full_text += str(p.getText())#.encode('utf-8', 'ignore'))
-                for a in p.find_all('a'):
-                    if a['href'][:6] == "/wiki/": links.append(a['href'])
-    except AttributeError:
-        print("invalid page, skipping")
-    except KeyError:
-        pass
-    filter(visible,full_text)
-    #print(title + full_text)
-    page_dict = {'title': title, 'url': page, 'links': links, 'text': full_text}
-    return page_dict
-
-def read_page_desc_links(page):
     print("reading page: " + page)
     page1 = requests.get(page)
     full_text = ""
@@ -93,10 +67,10 @@ def desc_1(root_page):
 def desc_2(root_page):
     data = {}
     data['pages'] = [] #nested array so can append new pages as needed
-    data['pages'].append(read_page_desc_links(root_page))
+    data['pages'].append(read_page(root_page))
     origin_links = data['pages'][0]['desc_links']
     for l in origin_links:
-        data['pages'].append(read_page_desc_links(STEM + l))
+        data['pages'].append(read_page(STEM + l))
     rt = data['pages'][0]['title']
     data_2 = {}
     data_2['pages'] = []
@@ -105,10 +79,9 @@ def desc_2(root_page):
         for l in p['desc_links']:
         #print(p['url'])
             data_2['pages'].append(read_page(STEM + l))# this making it depth 3, not 2!
+    data['pages'].append(data_2['pages'])
     with open(rt + "_2.json", 'w') as f:
         json.dump(data, f,sort_keys=True, indent=4)
-        json.dump(data_2, f, sort_keys=True, indent = 4)
-
 
 if __name__ == '__main__':
     root_page = str(sys.argv[2])
