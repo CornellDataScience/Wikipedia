@@ -8,38 +8,50 @@ import sys
 MAX_DEPTH = 3
 STEM = "https://en.wikipedia.org"
 
+#filtering out only raw text from the html file
+def visible(element):
+    if element.parent.name in ['style', 'script', '[document]', 'head', 'title']:
+        return False
+    elif re.match('<!--.*-->', str(element.encode('utf-8'))):
+        return False
+    return True
+
 #Read all the text on the page and return a list of links on that pageS
 def read_page(page):
     #if depth == -1: return
-    # print("reading page: " + page)
+    print("reading page: " + page)
     page1 = requests.get(page)
     try:
         soup = bs4(page1.text, "html5lib")
         text = soup.find_all('p')
         full_text = ""
+        title = ""
         # links=[]
         see_also = soup.find('span', id='See_also')
-        title = soup.find('h1').getText()
+        title = str(soup.find('h1').getText())
         for p in see_also.parent.previous_siblings:
             if p.name == 'p':
                 alt = p.find('img')
                 if not alt:
-                    full_text += str(p.getText().encode('utf-8', 'ignore'))
-        
+                    full_text += str(p.getText())#.encode('utf-8', 'ignore'))
+
         # for t in text:
         #     alt = t.find('img')
         #     if not alt:
         #         full_text += str(t.getText().encode('utf-8', 'ignore'))
-        
+
         # text = soup.find("div",{"class": "mw-parser-output"})
         # for a in text.find_all(href=True):
         #     if a['href'][:6] == "/wiki/": links.append(a['href'])
-    
+
 
     except AttributeError:
         print("invalid page, skipping")
     # print("title", title)
     # print("full_text", full_text)
+    except KeyError:
+        pass
+    filter(visible, full_text)
     return title, full_text
     # return links
 
