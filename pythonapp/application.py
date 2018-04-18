@@ -32,7 +32,7 @@ def my_form_post():
     G.add_edges_from(docs)
     G = G.to_directed()
 
-    path = randomwalk.DiGraphRandomWalk(G, 7, 10, .2, 'Linear algebra', True)
+    path = randomwalk.DiGraphRandomWalk(G, 7, 10, .2, text1.replace('_', ' '), True)
     print('The paths are: ')
     print(path)
 
