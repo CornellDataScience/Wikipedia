@@ -39,6 +39,7 @@ def my_form_post():
 
     show.graph(path)
     return "<h1>Showing the result for  " + text1 + "</h1>"
+    # return render_template('hello.html', name = user)
 
 if __name__ == '__main__':
     app.run()
