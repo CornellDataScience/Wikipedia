@@ -16,7 +16,6 @@ def visible(element):
     return True
 
 #build the json entry for a singular page
-#build the json entry for a singular page
 def read_page(page):
     #if depth == -1: return
     print("reading page: " + page)
@@ -59,7 +58,7 @@ def desc_1(root_page):
     for l in origin_links:
         data['pages'].append(read_page(STEM + l))
     rt = data['pages'][0]['title']
-    with open(rt + "_1.json", 'w') as f:
+    with open("../data/" + rt + "_1.json", 'w') as f:
         json.dump(data, f,sort_keys=True, indent=4)
 
 #read descriptions at depth 2
@@ -77,10 +76,9 @@ def desc_2(root_page):
     for i in range(1, len(data['pages'])):
         p = data['pages'][i]
         for l in p['desc_links']:
-        #print(p['url'])
-            data_2['pages'].append(read_page(STEM + l))# this making it depth 3, not 2!
-    data['pages'].append(data_2['pages'])
-    with open(rt + "_2.json", 'w') as f:
+            data_2['pages'].append(read_page(STEM + l))
+    data['pages'].append(data_2['pages'][:])
+    with open("../data/" + rt + "_2.json", 'w') as f:
         json.dump(data, f,sort_keys=True, indent=4)
 
 if __name__ == '__main__':
