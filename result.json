@@ -1,0 +1,51 @@
+{
+  "name": "0",
+  "children": [
+    {"name": "Euclidean vector", "size": 10},
+    {"name": "Optics", "size": 10},
+    {"name": "Norm (mathematics)", "size": 10},
+    {"name": "Linear map", "size": 10},
+    {"name": "Eigenvalues and eigenvectors", "size": 10},
+    {"name": "Calculus of variations", "size": 10},
+    {
+      "name": "1",
+      "children": [
+      {
+        "name": "Linear algebra", "size": 10},
+        {"name": "Physics", "size": 10},
+        {"name": "Norm (mathematics)", "size": 10},
+        {"name": "Map (mathematics)", "size": 10},
+        {"name": "Active and passive transformation", "size": 10},
+        {
+          "name": "2",
+          "children": [
+            {"name": "Endomorphism", "size": 10},
+            {"name": "Chaos theory", "size": 10},
+            {"name": "Space (mathematics)", "size": 10},
+            {"name": "Continuous function", "size": 10},
+            {
+              "name": "3",
+              "children": [
+                {"name": "Topological space", "size": 10},
+                {"name": "Dynamical system", "size": 10},
+                {"name": "Inner product space", "size": 10},
+                {"name": "4",
+                  "children": [
+                    {"name": "Endomorphism", "size": 10},
+                    {"name": "Linear system", "size": 10},
+                    {"name": "5",
+                      "children": [
+                        {"name": "Linear algebra", "size": 5},
+                        {"name": "Placeholder", "size": 10}
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
