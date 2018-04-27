@@ -8,6 +8,8 @@ def make_prototype_graph():
     G = nx.Graph()
     docs = sm.compute_similarity("../keywords/linalg_desclinks.json")
     G.add_edges_from(docs)
+    pr = nx.pagerank(G)
+    nx.set_node_attributes(G, pr,"pagerank")
     return G
 
 if __name__ == 'main':
