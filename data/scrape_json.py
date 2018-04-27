@@ -73,11 +73,12 @@ def desc_2(root_page):
     rt = data['pages'][0]['title']
     data_2 = {}
     data_2['pages'] = []
-    for i in range(1, len(data['pages'])):
+    l = len(data['pages'])
+    for i in range(1, l):
         p = data['pages'][i]
         for l in p['desc_links']:
-            data_2['pages'].append(read_page(STEM + l))
-    data['pages'].append(data_2['pages'][:])
+            data['pages'].append(read_page(STEM + l))
+    #data['pages'].append(data_2['pages'][:])
     with open("../data/" + rt + "_2.json", 'w') as f:
         json.dump(data, f,sort_keys=True, indent=4)
 
