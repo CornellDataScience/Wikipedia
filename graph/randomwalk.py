@@ -32,13 +32,7 @@ def DiGraphRandomWalk(G, niters, depth, threshold, weight=True):
                     # chooses successor node at random
                     node_neighbor = random.choice(G.successors(rand_node))
                     # leave the loop if an edge within an appropriate threshold is found
-                    print ("randnode: ", G.node[rand_node]['pagerank'], " <= nodeneighbor: ", G.node[node_neighbor]['pagerank'])
-                #    if G[rand_node][node_neighbor]['similarity'] > threshold:
-                #        print ("Similarity good")
-                #    else:
-                #        print ("Similarity bad")
                     if G[rand_node][node_neighbor]['similarity'] > threshold and G.node[node_neighbor]['pagerank'] >= G.node[rand_node]['pagerank']:
-                #        print ("Success")
                         break
                 # breaks loop if the end of node path has been reached
                 if node_neighbor == "None":
@@ -68,16 +62,12 @@ def DiGraphRandomWalk(G, niters, depth, threshold, weight=True):
     return visited_paths
 
 if __name__ == '__main__':
-    # test scenario
-    # G = nx.DiGraph()
-    # G.add_nodes_from("abcdefghij")
-    # G.add_weighted_edges_from([("a","b", .3),("a","c", .9),("b", "d", .1),("c","e", .1),("c","f", .6),("c","g", .9),("f","h", .6),("g","h", .2),("h","i", .4),("i","j", .6),("d", "i", .3)])
-
     # obtain graph of articles and perform random walks
     G = makeGraph.make_prototype_graph().to_directed()
-    path = DiGraphRandomWalk(G, 20, 10, 0.2, True)
+    path = DiGraphRandomWalk(G, 20, 10, 0.3, True)
     # output paths taken
     print(path)
+
     # generate list of edge weights
     weights = []
     for node1, node2 in G.edges():
