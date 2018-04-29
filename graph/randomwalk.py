@@ -5,12 +5,13 @@ import numpy as np
 import matplotlib.mlab as mlab
 import matplotlib.pyplot as plt
 
-def DiGraphRandomWalk(G, niters, depth, threshold, start_tag, weight=True):
+def DiGraphRandomWalk(G, niters, depth, threshold, weight=True):
     # init a random node
-    for i in G.nodes():
-        if i == start_tag:
-            start_node = i
-    rand_node = start_node
+    rand_node = G.nodes()[random.randint(0, len(G.nodes()))]
+    #for i in G.nodes():
+    #    if i == start_tag:
+    #        start_node = i
+    #rand_node = start_node
     visited_paths = []
 
     if weight == True:
@@ -31,7 +32,13 @@ def DiGraphRandomWalk(G, niters, depth, threshold, start_tag, weight=True):
                     # chooses successor node at random
                     node_neighbor = random.choice(G.successors(rand_node))
                     # leave the loop if an edge within an appropriate threshold is found
-                    if G[rand_node][node_neighbor]['similarity'] > threshold:
+                    print ("randnode: ", G.node[rand_node]['pagerank'], " <= nodeneighbor: ", G.node[node_neighbor]['pagerank'])
+                #    if G[rand_node][node_neighbor]['similarity'] > threshold:
+                #        print ("Similarity good")
+                #    else:
+                #        print ("Similarity bad")
+                    if G[rand_node][node_neighbor]['similarity'] > threshold and G.node[node_neighbor]['pagerank'] >= G.node[rand_node]['pagerank']:
+                #        print ("Success")
                         break
                 # breaks loop if the end of node path has been reached
                 if node_neighbor == "None":
@@ -40,7 +47,7 @@ def DiGraphRandomWalk(G, niters, depth, threshold, start_tag, weight=True):
                 rand_node = node_neighbor
             # add the determined path to the list of visited paths
             visited_paths.append(path)
-            rand_node = start_node
+            rand_node = G.nodes()[random.randint(0, len(G.nodes()))]
     else:
         # run simulation niters times
         for i in range(niters):
@@ -57,7 +64,7 @@ def DiGraphRandomWalk(G, niters, depth, threshold, start_tag, weight=True):
                 rand_node = node_neighbor
             # add the determined path to the list of visited paths
             visited_paths.append(path)
-            rand_node = start_node
+            rand_node = G.nodes()[random.randint(0, len(G.nodes()))]
     return visited_paths
 
 if __name__ == '__main__':
@@ -68,10 +75,9 @@ if __name__ == '__main__':
 
     # obtain graph of articles and perform random walks
     G = makeGraph.make_prototype_graph().to_directed()
-    path = DiGraphRandomWalk(G, 20, 10, .2, 'Linear algebra', True)
+    path = DiGraphRandomWalk(G, 20, 10, 0.2, True)
     # output paths taken
     print(path)
-
     # generate list of edge weights
     weights = []
     for node1, node2 in G.edges():
