@@ -10,11 +10,33 @@
 		</style>
 </head>
 <body>
-	<div id="div1"></div>
-	<div id="div2"></div>
-	<div id="div3"></div>
+	<div>
+		<form id="add" method="post" action="index.php">
+			<fieldset>
+				<!-- <legend><span class="number"></span> New Country </legend> -->
+				<label>Keyword:</label>
+				<select name="continent" required>
+					<option disabled selected value> -- Select an Keyword -- </option>
+					<option value="Asia">Asia</option>
+					<option value="North America">North America</option>
+					<option value="South America">South America</option>
+					<option value="Europe">Europe</option>
+					<option value="Africa">Africa</option>
+					<option value="Australia">Australia</option>
+					<option value="Antarctica">Antarctica</option>
+				</select>
+			</fieldset>
+			<input type="submit" name="add" value="Visualize" />
+		</form>
+	</div>
+	<div id="div1">
+	</div>
+	<div id="div2">
+	</div>
+	<div id="div3">
+	</div>
 	<script type="text/javascript">
-				var root = [
+				root = [
 					{
 	            "children": [
 								{"Name":"Olives","Count":4319},
