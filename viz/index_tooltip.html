@@ -3,25 +3,46 @@
 <head>
 	<meta charset="utf-8">
 		<title>D3: A simple packed Bubble Chart</title>
-		<script type="text/javascript" src="https://d3js.org/d3.v4.min.js"></script>
-
 		<style type="text/css">
-			/* No style rules here yet */
+			.tooltip{
+				position: absolute;
+				opacity:0;
+				width: 200px;
+				height: auto;
+				background: none repeat scroll 0 0 #D3D3D3;
+				border: 1px solid #000000;
+				border-radius: 2px;
+				padding: 4px;
+				text-align: center;
+				font-size:1em;
+				font-family:sans-serif;
+				right:10px;
+				top:20px;
+			}
 		</style>
+		<script type="text/javascript" src="https://d3js.org/d3.v4.min.js"></script>
 </head>
 <body>
-	<div id="div1"></div>
-	<div id="div2"></div>
-	<div id="div3"></div>
+	<div id="div1">
+	</div>
+	<div id="div2">
+	</div>
+	<div id="div3">
+	</div>
 	<script type="text/javascript">
-				var root = [
+				root = [
 					{
 	            "children": [
-								{"Name":"Olives","Count":4319},
-	                {"Name":"Tea","Count":4159},
-	                {"Name":"Mashed Potatoes","Count":2583},
-	                {"Name":"Boiled Potatoes","Count":2074},
-	                {"Name":"Milk","Count":1894},]
+								{"Name":"Olives","Count":4319,
+								"Desc":"Memes emememsmsdlfkjaslkdfjlakjglksjfdlkaj slfkdjalksdfjklajsdakjksd"},
+	                {"Name":"Tea","Count":4159,
+								"Desc":"Memes emememsmsdlfkjaslkdfjlakjglksjfdlkaj slfkdjalksdfjklajsdakjksd"},
+	                {"Name":"Mashed Potatoes","Count":2583,
+								"Desc":"Memes emememsmsdlfkjaslkdfjlakjglksjfdlkaj slfkdjalksdfjklajsdakjksd"},
+	                {"Name":"Boiled Potatoes","Count":2074,
+								"Desc":"Memes emememsmsdlfkjaslkdfjlakjglksjfdlkaj slfkdjalksdfjklajsdakjksd"},
+	                {"Name":"Milk","Count":1894,
+								"Desc":"Memes emememsmsdlfkjaslkdfjlakjglksjfdlkaj slfkdjalksdfjklajsdakjksd"},]
 	        },
 					{
 	            "children": [
@@ -57,7 +78,7 @@
             .attr("height", diameter)
             .attr("class", "bubble");
 				update(root[0],svg);
-				var svg1 = d3.select("#div2")
+				/*var svg1 = d3.select("#div2")
 						.append("svg")
 						.attr("width", diameter)
 						.attr("height", diameter)
@@ -68,17 +89,19 @@
 						.attr("width", diameter)
 						.attr("height", diameter)
 						.attr("class", "bubble");
-				update(root[2],svg2);
+				update(root[2],svg2);*/
 
 		function update(source,s) {
-
-
 			var bubble = d3.pack(source)
 					.size([diameter, diameter])
 					.padding(1.5);
 
 			var nodes = d3.hierarchy(source)
 					.sum(function(d) { return d.Count; });
+
+			var div = d3.select("body").append("div")
+            .attr("class", "tooltip")
+            .style("opacity", 0);
 
 			var node = s.selectAll(".node")
 					.data(bubble(nodes).descendants())
@@ -90,11 +113,23 @@
 					.attr("class", "node")
 					.attr("transform", function(d) {
 							return "translate(" + d.x + "," + d.y + ")";
-					});
+					})
+					.on('click',function(d){
+                div.transition().duration(200)
+                  //.style('left',d3.event.pageX - 20 + "px")
+                  //.style('top',d3.event.pageY + "px")
+                  .style('opacity','0.9')
+                  .style('display','inline-block')
+                div.html(d.Name);
+              })
+        /*.on("mouseout", function(d){
+          div.transition().duration(200)
+            .style('opacity','0');
+          });*/
 
 			node.append("title")
 					.text(function(d) {
-							return d.Name + ": " + d.Count;
+							return d.Name + ": " + d.Rank;
 					});
 
 			node.append("circle")
