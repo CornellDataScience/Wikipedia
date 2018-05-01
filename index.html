@@ -4,16 +4,23 @@
 	<meta charset="utf-8">
 		<title>D3: A simple packed Bubble Chart</title>
 		<script type="text/javascript" src="https://d3js.org/d3.v4.min.js"></script>
+		<script type="text/javacript" src="jump.js"></script>
 
 		<style type="text/css">
 			/* No style rules here yet */
+			svg {
+				fill: black
+			}
 		</style>
 </head>
 <body>
-	<div id="div1"></div>
+	<div id="div1">
+		<a id="target" href="#">hello</div>
+	</div>
 	<div id="div2"></div>
 	<div id="div3"></div>
 	<script type="text/javascript">
+
 				var root = [
 					{
 	            "children": [
@@ -132,6 +139,16 @@
 			d3.select(self.frameElement)
 					.style("height", diameter + "px");
 		}
+
+		jump(document.querySelector('#target'), {
+			duration: 1000,
+			offset: 0,
+			callback: undefined,
+			easing: easeInOutQuad,
+			a11y: false
+		})
+
+		// jump(100)
 
 
 	</script>
