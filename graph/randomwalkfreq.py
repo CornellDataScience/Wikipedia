@@ -33,11 +33,11 @@ def DiGraphRandomWalk(G, niters, depth, threshold, start_tag, weight=True):
                 while True:
                     count = count + 1
                     # end search if no successors exist or if the loop has executed (number of successors * 50) times
-                    if len(G.successors(rand_node)) == 0 or count > len(G.successors(rand_node)) * 50:
+                    if len(list(G.successors(rand_node))) == 0 or count > len(list(G.successors(rand_node))) * 50:
                         node_neighbor = "None"
                         break
                     # choose successor node at random
-                    node_neighbor = random.choice(G.successors(rand_node))
+                    node_neighbor = random.choice(len(list(G.successors(rand_node))))
                     # leave the loop if an edge within an appropriate threshold is found and successor node has a higher or equal PageRank
                     if G[rand_node][node_neighbor]['similarity'] > threshold and G.node[node_neighbor]['pagerank'] >= G.node[rand_node]['pagerank']:
                         break
@@ -60,7 +60,7 @@ def DiGraphRandomWalk(G, niters, depth, threshold, start_tag, weight=True):
                 else:
                     dict_list[j][rand_node] = 1
                 # end search if no successors exist
-                if len(G.successors(rand_node)) == 0:
+                if len(list(G.successors(rand_node))) == 0:
                     break
                 # choose successor node at random
                 node_neighbor = random.choice(G.successors(rand_node))

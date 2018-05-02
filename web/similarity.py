@@ -17,8 +17,7 @@ import json
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-
-
+lst = []
 def compute_similarity(docs):
     """
     A function to generate a dictionary of documents and their cosine similarity values with other documents.
