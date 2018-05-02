@@ -5,7 +5,7 @@
 		<title>D3: A simple packed Bubble Chart</title>
 		<style type="text/css">
 			.tooltip{
-				position: absolute;
+				position: fixed;
 				opacity:0;
 				width: 200px;
 				height: auto;
@@ -17,17 +17,50 @@
 				font-size:1em;
 				font-family:sans-serif;
 				right:10px;
-				top:20px;
+				top:50px;
+				word-wrap: break-word;
+			}
+			.left {
+				width:70%;
+				float:left;
+			}
+
+			#right {
+				width:30%;
+				float:right;
 			}
 		</style>
 		<script type="text/javascript" src="https://d3js.org/d3.v4.min.js"></script>
 </head>
 <body>
-	<div id="div1">
+	<div>
+		<form id="add" method="post">
+			<fieldset>
+				<!-- <legend><span class="number"></span> New Country </legend> -->
+				<label>Keyword:</label>
+				<select name="continent" required>
+					<option disabled selected value> -- Select an Keyword -- </option>
+					<option value="Asia">Asia</option>
+					<option value="North America">North America</option>
+					<option value="South America">South America</option>
+					<option value="Europe">Europe</option>
+					<option value="Africa">Africa</option>
+					<option value="Australia">Australia</option>
+					<option value="Antarctica">Antarctica</option>
+				</select>
+			</fieldset>
+			<input type="submit" name="add" value="Visualize" />
+		</form>
 	</div>
-	<div id="div2">
+	<div class="left">
+		<div id="div1">
+		</div>
+		<div id="div2">
+		</div>
+		<div id="div3">
+		</div>
 	</div>
-	<div id="div3">
+	<div id="right">
 	</div>
 	<script type="text/javascript">
 				root = [
@@ -78,7 +111,7 @@
             .attr("height", diameter)
             .attr("class", "bubble");
 				update(root[0],svg);
-				/*var svg1 = d3.select("#div2")
+				var svg1 = d3.select("#div2")
 						.append("svg")
 						.attr("width", diameter)
 						.attr("height", diameter)
@@ -89,7 +122,7 @@
 						.attr("width", diameter)
 						.attr("height", diameter)
 						.attr("class", "bubble");
-				update(root[2],svg2);*/
+				update(root[2],svg2);
 
 		function update(source,s) {
 			var bubble = d3.pack(source)
@@ -99,7 +132,7 @@
 			var nodes = d3.hierarchy(source)
 					.sum(function(d) { return d.Count; });
 
-			var div = d3.select("body").append("div")
+			var div = d3.select("#right").append("div")
             .attr("class", "tooltip")
             .style("opacity", 0);
 
