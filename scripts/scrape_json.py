@@ -16,7 +16,6 @@ def visible(element):
     return True
 
 #build the json entry for a singular page
-#build the json entry for a singular page
 def read_page(page):
     #if depth == -1: return
     print("reading page: " + page)
@@ -42,13 +41,17 @@ def read_page(page):
             if p.name == "p":
                 for a in p.find_all('a'):
                     if a['href'][:6] == "/wiki/": desc_links.append(a['href'])
+        for p in toc.previous_siblings:
+            if p.name == "p":
+                desc_text += str(p.getText().encode('utf-8', 'ignore'))
     except AttributeError:
         print("invalid page, skipping")
     except KeyError:
         pass
     filter(visible,full_text)
     #print(title + full_text)
-    page_dict = {'title': title, 'url': page, 'links': links, 'text': full_text, 'desc_links': desc_links}
+    page_dict = {'title': title, 'url': page, 'links': links,
+        'text': full_text, 'desc_links': desc_links, 'desc_text':desc_text}
     return page_dict
 
 def desc_1(root_page):
@@ -59,8 +62,10 @@ def desc_1(root_page):
     for l in origin_links:
         data['pages'].append(read_page(STEM + l))
     rt = data['pages'][0]['title']
-    with open("../data/" + rt + "_1.json", 'w') as f:
+    doc_title = "../data/" + rt + "_1.json"
+    with open(doc_title, 'w') as f:
         json.dump(data, f,sort_keys=True, indent=4)
+    return doc_title
 
 #read descriptions at depth 2
 #will only pull links from the intro paragraph to avoid pulling inordinate amounts of data
@@ -74,14 +79,16 @@ def desc_2(root_page):
     rt = data['pages'][0]['title']
     data_2 = {}
     data_2['pages'] = []
-    for i in range(1, len(data['pages'])):
+    l = len(data['pages'])
+    for i in range(1, l):
         p = data['pages'][i]
         for l in p['desc_links']:
-        #print(p['url'])
-            data_2['pages'].append(read_page(STEM + l))# this making it depth 3, not 2!
-    data['pages'].append(data_2['pages'][:])
-    with open("../data/" + rt + "_2.json", 'w') as f:
+            data['pages'].append(read_page(STEM + l))
+    #data['pages'].append(data_2['pages'][:])
+    doc_title = "../data/" + rt + "_2.json"
+    with open(doc_title, 'w') as f:
         json.dump(data, f,sort_keys=True, indent=4)
+    return doc_title
 
 if __name__ == '__main__':
     root_page = str(sys.argv[2])
