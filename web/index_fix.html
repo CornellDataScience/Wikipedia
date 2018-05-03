@@ -7,27 +7,46 @@
 			.tooltip{
 				position: fixed;
 				opacity:0;
-				width: 200px;
-				height: auto;
-				background: none repeat scroll 0 0 #D3D3D3;
+				width: 250px;
+				height: 200px;
+				/* background: none repeat scroll 0 0 #D3D3D3; */
 				border: 1px solid #000000;
 				border-radius: 2px;
 				padding: 4px;
-				text-align: center;
+				/* text-align: center; */
 				font-size:1em;
 				font-family:sans-serif;
 				right:10px;
 				top:50px;
 				word-wrap: break-word;
+				overflow-y: scroll;
+				margin-right: 50px;
+				margin-top: 50px;;
+				/* height: 80vh; */
+				background: #F2F2F2;
+				border: 1px solid #ccc;
+				box-shadow: 1px 1px 2px #fff inset,
+										-1px -1px 2px #fff inset;
+				border-radius: 3px/6px;
 			}
 			.left {
 				width:70%;
 				float:left;
+				margin-left: 60px;
 			}
 
 			#right {
 				width:30%;
 				float:right;
+				-webkit-border-radius: 0% 0% 100% 100% / 0% 0% 8px 8px;
+				-webkit-box-shadow: rgba(0, 0, 0,.30) 0 2px 3px;
+			}
+
+			.viz {
+				margin-left: 30px;
+				margin: 0 auto;
+				border-bottom:3px solid;
+				border-bottom-color:#000000;
 			}
 		</style>
 		<script type="text/javascript" src="https://d3js.org/d3.v4.min.js"></script>
@@ -51,11 +70,11 @@
 		</form>
 	</div>
 	<div class="left">
-		<div id="div1">
+		<div id="div1" class="viz">
 		</div>
-		<div id="div2">
+		<div id="div2" class="viz">
 		</div>
-		<div id="div3">
+		<div id="div3" class="viz">
 		</div>
 	</div>
 	<div id="right">
@@ -134,18 +153,14 @@
 							return "translate(" + d.x + "," + d.y + ")";
 					})
 					.on('click',function(d){
-							// if(div != undefined) {d3.select("#info").remove()};
-							// var div = d3.select("#right").append("div")
-							// 			.attr("id", "info")
-							// 			.attr("class", "tooltip")
-							// 			.style("opacity", 0);
 
 								div.transition().duration(200)
 									//.style('left',d3.event.pageX - 20 + "px")
 									//.style('top',d3.event.pageY + "px")
 									.style('opacity','0.9')
 									.style('display','inline-block')
-								div.html(d.data.desc);
+								div.html("<h4><a href='" + d.data.url+"' target='_blank'>" + d.data.title + "</a></h4>" +
+                                    "<p>" + d.data.desc + "<p>");
 							})
 				/*.on("mouseout", function(d){
 					div.transition().duration(200)
