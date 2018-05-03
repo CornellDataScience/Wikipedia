@@ -14,20 +14,20 @@
   				<label>Keyword:</label>
   				<select name="continent" required>
   					<option disabled selected value> -- Select an Keyword -- </option>
-  					<option value="Asia">Asia</option>
-  					<option value="North America">North America</option>
-  					<option value="South America">South America</option>
+  					<option value="Asia">Eigenvalues_and_eigenvectors</option>
+  					<option value="North America">Meme</option>
+  					<option value="South America">Normal_distribution</option>
   					<option value="Europe">Europe</option>
   					<option value="Africa">Africa</option>
-  					<option value="Australia">Australia</option>
-  					<option value="Antarctica">Antarctica</option>
+
   				</select>
   			</fieldset>
-  			<input type="submit" name="add" value="Visualize" />
+  			<!-- <input type="submit" name="add" value="Visualize" /> -->
+        <input type="button" name="submit_id" id="btn_id" value="Submit by Id" onclick="submit_by_id()"/>
   		</form>
   	</div>
 
-    
+
   </section>
   <section id="section02" class="demo">
     <!-- <h1>Scroll Down Button #2</h1> -->
@@ -65,61 +65,120 @@ $(function() {
 <!-- load the d3.js library -->
 <script src="//d3js.org/d3.v4.min.js"></script>
 <script>
+var root;
+// Submit form with id function.
+function submit_by_id() {
 
-// set the dimensions and margins of the graph
-var margin = {top: 20, right: 20, bottom: 30, left: 40},
-    width = 960 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
-
-// set the ranges
-var x = d3.scaleBand()
-          .range([0, width])
-          .padding(0.1);
-var y = d3.scaleLinear()
-          .range([height, 0]);
-
-// append the svg object to the body of the page
-// append a 'group' element to 'svg'
-// moves the 'group' element to the top left margin
-var svg = d3.select("#section02").append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-    .attr("transform",
-          "translate(" + margin.left + "," + margin.top + ")");
-
-// get the data
-d3.csv("sales.csv", function(error, data) {
-  if (error) throw error;
-
-  // format the data
-  data.forEach(function(d) {
-    d.sales = +d.sales;
+  d3.json("Eigenvalues_and_eigenvectors_web.json", function(error,data){
+    console.log(error);
+    root = data;
+    if(root != undefined){
+      console.log(root);
+      var diameter = 600;
+      var color = d3.scaleOrdinal(d3.schemeCategory20);
+      // d3.selectAll("svg").exit().remove();
+      d3.selectAll("svg").remove();
+      var svg = d3.select("#section02")
+          .append("svg")
+          .attr("width", diameter)
+          .attr("height", diameter)
+          .attr("class", "bubble");
+      update(root[0],svg);
+      var svg1 = d3.select("#section03")
+          .append("svg")
+          .attr("width", diameter)
+          .attr("height", diameter)
+          .attr("class", "bubble");
+      update(root[1],svg1);
+      var svg2 = d3.select("#section04")
+          .append("svg")
+          .attr("width", diameter)
+          .attr("height", diameter)
+          .attr("class", "bubble");
+      update(root[2],svg2);
+    }
+    //console.log(root);
   });
+}
 
-  // Scale the range of the data in the domains
-  x.domain(data.map(function(d) { return d.salesperson; }));
-  y.domain([0, d3.max(data, function(d) { return d.sales; })]);
+  function update(source,s) {
+    var diameter = 600;
+    var color = d3.scaleOrdinal(d3.schemeCategory20);
+    var bubble = d3.pack(source)
+        .size([diameter, diameter])
+        .padding(1.5);
 
-  // append the rectangles for the bar chart
-  svg.selectAll(".bar")
-      .data(data)
-    .enter().append("rect")
-      .attr("class", "bar")
-      .attr("x", function(d) { return x(d.salesperson); })
-      .attr("width", x.bandwidth())
-      .attr("y", function(d) { return y(d.sales); })
-      .attr("height", function(d) { return height - y(d.sales); });
+    var nodes = d3.hierarchy(source)
+        .sum(function(d) { return d.Count; });
 
-  // add the x Axis
-  svg.append("g")
-      .attr("transform", "translate(0," + height + ")")
-      .call(d3.axisBottom(x));
+    console.log(nodes);
+    var div = d3.select("#right").append("div")
+          .attr("class", "tooltip")
+          .style("opacity", 0);
 
-  // add the y Axis
-  svg.append("g")
-      .call(d3.axisLeft(y));
+    var node = s.selectAll(".node")
+        .data(bubble(nodes).descendants())
+        .enter()
+        .filter(function(d){
+            return  !d.children
+        })
+        .append("g")
+        .attr("class", "node")
+        .attr("transform", function(d) {
+            return "translate(" + d.x + "," + d.y + ")";
+        })
+        .on('click',function(d){
+              div.transition().duration(200)
+                //.style('left',d3.event.pageX - 20 + "px")
+                //.style('top',d3.event.pageY + "px")
+                .style('opacity','0.9')
+                .style('display','inline-block')
+              div.html(d.data.Desc);
+            })
+      /*.on("mouseout", function(d){
+        div.transition().duration(200)
+          .style('opacity','0');
+        });*/
 
-});
+    node.append("title")
+        .text(function(d) {
+            return d.Name + ": " + d.Rank;
+        });
+
+    node.append("circle")
+        .attr("r", function(d) {
+            return d.r;
+        })
+        .style("fill", function(d,i) {
+            return color(i);
+        });
+
+    node.append("text")
+        .attr("dy", ".2em")
+        .style("text-anchor", "middle")
+        .text(function(d) {
+            return d.data.Name.substring(0, d.r / 3);
+        })
+        .attr("font-family", "sans-serif")
+        .attr("font-size", function(d){
+            return d.r/5;
+        })
+        .attr("fill", "white");
+
+    node.append("text")
+        .attr("dy", "1.3em")
+        .style("text-anchor", "middle")
+        .text(function(d) {
+            return d.data.Count;
+        })
+        .attr("font-family",  "Gill Sans", "Gill Sans MT")
+        .attr("font-size", function(d){
+            return d.r/5;
+        })
+        .attr("fill", "white");
+
+    d3.select(self.frameElement)
+        .style("height", diameter + "px");
+  }
 </script>
 </html>

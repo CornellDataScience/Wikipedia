@@ -38,15 +38,11 @@
 			<fieldset>
 				<!-- <legend><span class="number"></span> New Country </legend> -->
 				<label>Keyword:</label>
-				<select name="continent" required>
+				<select name="continent" id="name" required>
 					<option disabled selected value> -- Select a Keyword -- </option>
-					<option value="Asia">Asia</option>
-					<option value="North America">North America</option>
-					<option value="South America">South America</option>
-					<option value="Europe">Europe</option>
-					<option value="Africa">Africa</option>
-					<option value="Australia">Australia</option>
-					<option value="Antarctica">Antarctica</option>
+					<option value="Eigenvalues_and_eigenvectors">Eigenvalues_and_eigenvectors</option>
+					<option value="Meme">Meme</option>
+					<option value="Normal_distribution">Normal_distribution</option>
 				</select>
 			</fieldset>
 			<!-- <input type="submit" name="add" value="Visualize" /> -->
@@ -68,8 +64,10 @@
 	var root;
 	// Submit form with id function.
 	function submit_by_id() {
-
-		d3.json("Eigenvalues_and_eigenvectors_web.json", function(error,data){
+		var name = document.getElementById("name").value;
+		name = name.concat("_web.json");
+		console.log(name);
+		d3.json(name, function(error,data){
 			console.log(error);
 			root = data;
 			if(root != undefined){
