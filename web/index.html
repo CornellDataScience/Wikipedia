@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+		<title>D3: A simple packed Bubble Chart</title>
+		<style type="text/css">
+			.tooltip{
+				position: fixed;
+				opacity:0;
+				width: 200px;
+				height: auto;
+				background: none repeat scroll 0 0 #D3D3D3;
+				border: 1px solid #000000;
+				border-radius: 2px;
+				padding: 4px;
+				text-align: center;
+				font-size:1em;
+				font-family:sans-serif;
+				right:10px;
+				top:50px;
+				word-wrap: break-word;
+			}
+			.left {
+				width:70%;
+				float:left;
+			}
+
+			#right {
+				width:30%;
+				float:right;
+			}
+		</style>
+		<script type="text/javascript" src="https://d3js.org/d3.v4.min.js"></script>
+</head>
+<body>
+	<div>
+		<form id="add">
+			<fieldset>
+				<!-- <legend><span class="number"></span> New Country </legend> -->
+				<label>Keyword:</label>
+				<select name="continent" required>
+					<option disabled selected value> -- Select a Keyword -- </option>
+					<option value="Asia">Asia</option>
+					<option value="North America">North America</option>
+					<option value="South America">South America</option>
+					<option value="Europe">Europe</option>
+					<option value="Africa">Africa</option>
+					<option value="Australia">Australia</option>
+					<option value="Antarctica">Antarctica</option>
+				</select>
+			</fieldset>
+			<!-- <input type="submit" name="add" value="Visualize" /> -->
+			<!-- <a href="javascript: submitform()">Submit</a> -->
+			<input type="button" name="submit_id" id="btn_id" value="Submit by Id" onclick="submit_by_id()"/>
+		</form>
+	</div>
+	<div class="left">
+		<div id="div1">
+		</div>
+		<div id="div2">
+		</div>
+		<div id="div3">
+		</div>
+	</div>
+	<div id="right">
+	</div>
+	<script type="text/javascript">
+	var root;
+	// Submit form with id function.
+	function submit_by_id() {
+		d3.json("Eigenvalues and eigenvectors_web.json", function(data){
+			console.log(data);
+			root = data;
+			if(root != undefined){
+				console.log(root);
+				var diameter = 600;
+				var color = d3.scaleOrdinal(d3.schemeCategory20);
+				// d3.selectAll("svg").exit().remove();
+				d3.selectAll("svg").remove();
+				var svg = d3.select("#div1")
+						.append("svg")
+						.attr("width", diameter)
+						.attr("height", diameter)
+						.attr("class", "bubble");
+				update(root[1],svg);
+				var svg1 = d3.select("#div2")
+						.append("svg")
+						.attr("width", diameter)
+						.attr("height", diameter)
+						.attr("class", "bubble");
+				update(root["topics3"],svg1);
+				var svg2 = d3.select("#div3")
+						.append("svg")
+						.attr("width", diameter)
+						.attr("height", diameter)
+						.attr("class", "bubble");
+				update(root["topics4"],svg2);
+			}
+			//console.log(root);
+		});
+	}
+
+		function update(source,s) {
+			var diameter = 600;
+			var color = d3.scaleOrdinal(d3.schemeCategory20);
+			var bubble = d3.pack()
+					.size([diameter, diameter])
+					.padding(1.5);
+
+			var nodes = d3.hierarchy(source)
+					.sum(function(d) { return parseInt(d.freq); });
+			console.log(bubble(nodes).descendants());
+
+			var div = d3.select("#right").append("div")
+						.attr("class", "tooltip")
+						.style("opacity", 0);
+
+			var node = s.selectAll(".node")
+					.data(bubble(nodes).descendants())
+					.enter()
+					.filter(function(d){
+							return  !d.children
+					})
+					.append("g")
+					.attr("class", "node")
+					.attr("transform", function(d) {
+							return "translate(" + d.x + "," + d.y + ")";
+					})
+					.on('click',function(d){
+								div.transition().duration(200)
+									//.style('left',d3.event.pageX - 20 + "px")
+									//.style('top',d3.event.pageY + "px")
+									.style('opacity','0.9')
+									.style('display','inline-block')
+								div.html(d.data.desc);
+							})
+				/*.on("mouseout", function(d){
+					div.transition().duration(200)
+						.style('opacity','0');
+					});*/
+
+			/*var nodeWithContent = d3.selectAll(".node, .node *");
+			function equivToTarget(){
+				return this == d3.event.target;
+			}
+			d3.select("body").on("click",function(){
+		    var outside = nodeWithContent.filter(equivToTarget).empty();
+		    if (outside) {
+					div.style('opacity','0');
+						console.log("outside");
+		    }
+			});*/
+			node.append("title")
+					.text(function(d) {
+							return d.title;
+					});
+
+			node.append("circle")
+					.attr("r", function(d) {
+							return d.r;
+					})
+					.style("fill", function(d,i) {
+							return color(i);
+					});
+
+			node.append("text")
+					.attr("dy", ".2em")
+					.style("text-anchor", "middle")
+					.text(function(d) {
+							return d.data.title.substring(0, d.r / 3);
+					})
+					.attr("font-family", "sans-serif")
+					.attr("font-size", function(d){
+							return d.r/5;
+					})
+					.attr("fill", "white");
+
+			node.append("text")
+					.attr("dy", "1.3em")
+					.style("text-anchor", "middle")
+					.text(function(d) {
+							return d.data.Count;
+					})
+					.attr("font-family",  "Gill Sans", "Gill Sans MT")
+					.attr("font-size", function(d){
+							return d.r/5;
+					})
+					.attr("fill", "white");
+
+			d3.select(self.frameElement)
+					.style("height", diameter + "px");
+		}
+	</script>
+</body>
+</html>

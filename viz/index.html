@@ -195,6 +195,7 @@
 
 
 		function update(source,s) {
+			console.log("src: " + source);
 			var diameter = 600;
 			var color = d3.scaleOrdinal(d3.schemeCategory20);
 			var bubble = d3.pack(source)
@@ -204,6 +205,7 @@
 			var nodes = d3.hierarchy(source)
 					.sum(function(d) { return d.Count; });
 
+			console.log(nodes);
 			var div = d3.select("#right").append("div")
 						.attr("class", "tooltip")
 						.style("opacity", 0);
