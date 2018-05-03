@@ -4,6 +4,7 @@ import requests
 import csv
 import re
 import sys
+import io
 MAX_DEPTH = 3
 STEM = "https://en.wikipedia.org"
 
@@ -62,7 +63,7 @@ def desc_1(root_page):
         data['pages'].append(read_page(STEM + l))
     rt = data['pages'][0]['title']
     doc_title = "../data/" + root_page[30:]+ "_1.json"
-    with open(doc_title, 'w') as f:
+    with io.open(doc_title, 'w', encoding="utf-8") as f:
         json.dump(data, f,sort_keys=True, indent=4)
     f.close()
     print(doc_title)
@@ -87,7 +88,7 @@ def desc_2(root_page):
     #data['pages'].append(data_2['pages'][:])"""
     rt = data['pages'][0]['title']
     doc_title = "../data/" + root_page[30:] + "_2.json"
-    with open(doc_title, 'w') as f:
+    with io.open(doc_title, 'w', encoding="utf-8") as f:
         json.dump(data, f,sort_keys=True, indent=4)
         print("FINISHING")
         return rt
