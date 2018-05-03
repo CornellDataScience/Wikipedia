@@ -76,30 +76,37 @@
 				var color = d3.scaleOrdinal(d3.schemeCategory20);
 				// d3.selectAll("svg").exit().remove();
 				d3.selectAll("svg").remove();
+				var div = d3.select("#right").append("div")
+							.attr("id", "info")
+							.attr("class", "tooltip")
+							.style("opacity", 0);
+
 				var svg = d3.select("#div1")
 						.append("svg")
 						.attr("width", diameter)
 						.attr("height", diameter)
 						.attr("class", "bubble");
-				update(root[0],svg);
+				update(root[0],svg,div);
 				var svg1 = d3.select("#div2")
 						.append("svg")
 						.attr("width", diameter)
 						.attr("height", diameter)
 						.attr("class", "bubble");
-				update(root[1],svg1);
+				update(root[1],svg1,div);
 				var svg2 = d3.select("#div3")
 						.append("svg")
 						.attr("width", diameter)
 						.attr("height", diameter)
 						.attr("class", "bubble");
-				update(root[2],svg2);
+				update(root[2],svg2,div);
+
+
 			}
 			//console.log(root);
 		});
 	}
 
-		function update(source,s) {
+		function update(source,s,div) {
 			var diameter = 600;
 			var color = d3.scaleOrdinal(d3.schemeCategory20);
 			var bubble = d3.pack(source)
@@ -110,10 +117,11 @@
 					.sum(function(d) { return d.freq; });
 
 			console.log(nodes);
-			var div = d3.select("#right").append("div")
-						.attr("class", "tooltip")
-						.style("opacity", 0);
-
+			// var div = d3.select("#info").remove("div");
+			// var div = d3.select("#right").append("div")
+			// 			.attr("id", "info")
+			// 			.attr("class", "tooltip")
+			// 			.style("opacity", 0);
 			var node = s.selectAll(".node")
 					.data(bubble(nodes).descendants())
 					.enter()
@@ -126,6 +134,12 @@
 							return "translate(" + d.x + "," + d.y + ")";
 					})
 					.on('click',function(d){
+							// if(div != undefined) {d3.select("#info").remove()};
+							// var div = d3.select("#right").append("div")
+							// 			.attr("id", "info")
+							// 			.attr("class", "tooltip")
+							// 			.style("opacity", 0);
+
 								div.transition().duration(200)
 									//.style('left',d3.event.pageX - 20 + "px")
 									//.style('top',d3.event.pageY + "px")
