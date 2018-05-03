@@ -41,11 +41,11 @@ if __name__ == '__main__':
     print("depth: " + str(depth))
     print("root page: " +root_page)
     #get all the data
-    if depth == 1:
+    """if depth == 1:
         t = scrape.desc_1(root_page)
     elif depth == 2:
         t = scrape.desc_2(root_page)
-    print(t)
+    print(t)"""
     doc_title = "../data/" + root_page[30:]+ "_"+str(depth)+".json"
     print("***** saved to file " + doc_title)
 

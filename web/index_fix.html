@@ -59,9 +59,9 @@
 				<label>Keyword:</label>
 				<select name="continent" id="name" required>
 					<option disabled selected value> -- Select a Keyword -- </option>
-					<option value="Eigenvalues_and_eigenvectors">Eigenvalues_and_eigenvectors</option>
-					<option value="Meme">Meme</option>
-					<option value="Normal distribution">Normal_distribution</option>
+					<option value="Eigenvalues and eigenvectors">Eigenvalues</option>
+					<option value="Solid-state physics">Solid State Phsyics</option>
+					<option value="White Walker">While Walkers</option>
 				</select>
 			</fieldset>
 			<!-- <input type="submit" name="add" value="Visualize" /> -->
@@ -105,19 +105,19 @@
 						.attr("width", diameter)
 						.attr("height", diameter)
 						.attr("class", "bubble");
-				update(root[0],svg,div);
+				update(root[1],svg,div);
 				var svg1 = d3.select("#div2")
 						.append("svg")
 						.attr("width", diameter)
 						.attr("height", diameter)
 						.attr("class", "bubble");
-				update(root[1],svg1,div);
+				update(root[2],svg1,div);
 				var svg2 = d3.select("#div3")
 						.append("svg")
 						.attr("width", diameter)
 						.attr("height", diameter)
 						.attr("class", "bubble");
-				update(root[2],svg2,div);
+				update(root[3],svg2,div);
 
 
 			}
