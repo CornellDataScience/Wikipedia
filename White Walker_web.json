@@ -1,0 +1,78 @@
+[
+    {
+        "children": [
+            {
+                "desc": "b'A White Walker is a humanoid creature from the HBO television series Game of Thrones, and the George R. R. Martin novel series A Song of Ice and Fire on which it is based. Primarily referred to as the Others in the novels, White Walkers are a supernatural threat to mankind who dwell north of The Wall in Westeros.[1][2] The Verge named them among \"the most visually iconic creatures on the show\".[3] White Walkers are also featured in the show\\'s merchandising.'b''",
+                "freq": 20,
+                "title": "White Walker",
+                "url": "https://en.wikipedia.org/wiki/Others_(A_Song_of_Ice_and_Fire)"
+            }
+        ]
+    },
+    {
+        "children": [
+            {
+                "desc": "b'A Game of Thrones is a strategy board game created by Christian T. Petersen and released by Fantasy Flight Games in 2003. The game is based on the A Song of Ice and Fire fantasy series by George R. R. Martin. It was followed in 2004 by the expansion A Clash of Kings, and in 2006 by the expansion A Storm of Swords.'b'A Game of Thrones allows the players to take on the roles of several of the Great Houses vying for control of the Seven Kingdoms, including House Stark, House Lannister, House Baratheon, House Greyjoy, House Tyrell, and as of the expansion A Clash of Kings, House Martell. Players maneuver armies to secure support in the various regions that comprise the Seven Kingdoms, with the goal of capturing enough support to claim the Iron Throne. The basic gameplay mechanics are reminiscent of Diplomacy, especially in the order-giving process, though A Game of Thrones is significantly more complicated overall.'b'In 2004, A Game of Thrones won three Origins Awards for Best Traditional Board Game, Best Board Game, and Best Board Game Design for the year 2003.[1]'b'A second edition of the game was released in 2011.'b''",
+                "freq": 2,
+                "title": "A Game of Thrones",
+                "url": "https://en.wikipedia.org/wiki/A_Game_of_Thrones_(board_game)"
+            },
+            {
+                "desc": "b'Home Box Office (HBO) is an American premium cable and satellite television network owned and operated by Home Box Office, Inc., a division of Time Warner. Programming featured on the network consists primarily of theatrically released motion pictures and original television series, along with made-for-cable movies and documentaries, boxing matches, and occasional stand-up comedy and concert specials.'b'HBO is the oldest and longest continuously operating pay television service (basic or premium) in the United States, having been in operation since November 8, 1972. In 2016, HBO had an adjusted operating income of US$1.93 billion, compared to the US$1.88 billion it accrued in 2015.[3] HBO has 49 million subscribers in the United States and 130 million worldwide as of 2016.[4][5] The network provides seven 24-hour multiplex channels, including HBO Comedy, HBO Latino, HBO Signature, and HBO Family. It launched the streaming service HBO Now in April 2015 and has over 2 million subscribers in the United States as of February 2017.[6]'b''",
+                "freq": 2,
+                "title": "HBO",
+                "url": "https://en.wikipedia.org/wiki/HBO"
+            },
+            {
+                "desc": "b'A humanoid (/\\xcb\\x88hju\\xcb\\x90m\\xc9\\x99n\\xc9\\x94\\xc9\\xaad/; from English human and -oid \"resembling\") is something that has an appearance resembling a human without actually being one. The earliest recorded use of the term, in 1870, referred to indigenous peoples in areas colonized by Europeans. By the 20th century, the term came to describe fossils which were morphologically similar, but not identical, to those of the human skeleton.[1]'b'Although this usage was common in the sciences for much of the 20th century, it is now considered rare.[1] More generally, the term can refer to anything with distinctly human characteristics or adaptations, such as possessing opposable anterior forelimb-appendages (i.e. thumbs), visible spectrum-binocular vision (i.e. having two eyes), or biomechanic plantigrade-bipedalism (i.e. the ability to walk on heels and metatarsals in an upright position). Science fiction media frequently present sentient extraterrestrial lifeforms as humanoid as a byproduct of convergent evolution theory.'b''",
+                "freq": 2,
+                "title": "Humanoid",
+                "url": "https://en.wikipedia.org/wiki/Humanoid"
+            }
+        ]
+    },
+    {
+        "children": [
+            {
+                "desc": "b'A television show (often simply TV show) is any content produced for broadcast via over-the-air, satellite, cable, or internet and typically viewed on a television set, excluding breaking news, advertisements, or trailers which are typically placed between shows. Television shows are most often scheduled well ahead of time and appear on electronic guides or other TV listings.'b'A television show might also be called a television program (British English: programme), especially if it lacks a narrative structure. A television series is usually released in episodes which follow a narrative, and are usually divided into seasons (US and Canada) or series (UK) \\xe2\\x80\\x93 yearly or semiannual sets of new episodes. A show with a limited number of episodes may be called a miniseries, serial, or limited series. A one-time show may be called a \"special\". A television film (\"made-for-TV movie\" or \"television movie\") is a film that is initially broadcast on television rather than released in theaters or direct-to-video.'b'Television shows can be viewed as they are broadcast in real-time (live), be recorded on home video or a digital video recorder for later viewing, or be viewed on demand via a set-top box or streamed over the internet.'b''",
+                "freq": 4,
+                "title": "Television show",
+                "url": "https://en.wikipedia.org/wiki/Television_program"
+            },
+            {
+                "desc": "b'The New York Times Best Seller list is widely considered the preeminent list of best-selling books in the United States.[1][2] Published weekly in The New York Times Book Review,[1] the best-seller list has been published in the Times since October 12, 1931.[1] In recent years it has evolved into multiple lists in different categories, broken down by fiction and non-fiction, hardcover, paperback, and electronic, and different genres.'b''",
+                "freq": 2,
+                "title": "New York Times Best Seller list",
+                "url": "https://en.wikipedia.org/wiki/The_New_York_Times_Best_Seller_list"
+            },
+            {
+                "desc": "b'Stand-up comedy is a comic style in which a comedian performs in front of a live audience, usually speaking directly to them. The performer is commonly known as a comic, stand-up comic, stand-up comedian or simply a stand-up.[1] In stand-up comedy, the comedian usually recites a grouping of humorous stories, jokes and one-liners typically called a monologue, routine or act. Some stand-up comedians use props, music or magic tricks to \"enhance\" their acts. Stand-up comedy is often performed in comedy clubs, bars and pubs, nightclubs, neo-burlesques, colleges and theatres. Outside live performance, stand-up is often distributed commercially via television, DVD, CD and the internet.[1][2]'b''",
+                "freq": 2,
+                "title": "Stand-up comedy",
+                "url": "https://en.wikipedia.org/wiki/Stand-up_comedy"
+            }
+        ]
+    },
+    {
+        "children": [
+            {
+                "desc": "b'Bipedalism is a form of terrestrial locomotion where an organism moves by means of its two rear limbs or legs. An animal or machine that usually moves in a bipedal manner is known as a biped /\\xcb\\x88ba\\xc9\\xaap\\xc9\\x9bd/, meaning \"two feet\" (from the Latin bis for \"double\" and pes for \"foot\"). Types of bipedal movement include walking, running, or hopping.'b'Few modern species are habitual bipeds whose normal method of locomotion is two-legged. Within mammals, habitual bipedalism has evolved multiple times, with the macropods, kangaroo rats and mice, springhare,[4] hopping mice, pangolins and homininan apes (australopithecines and humans) well as various other extinct groups evolving the trait independently. In the Triassic period some groups of archosaurs (a group that includes the ancestors of crocodiles) developed bipedalism; among their descendants the dinosaurs, all the early forms and many later groups were habitual or exclusive bipeds; the birds descended from one group of exclusively bipedal dinosaurs.'b'A larger number of modern species intermittently or briefly use a bipedal gait. Several lizard species move bipedally when running, usually to escape from threats. Many primate and bear species will adopt a bipedal gait in order to reach food or explore their environment. Several arboreal primate species, such as gibbons and indriids, exclusively walk on two legs during the brief periods they spend on the ground. Many animals rear up on their hind legs whilst fighting or copulating. Some animals commonly stand on their hind legs, in order to reach food, to keep watch, to threaten a competitor or predator, or to pose in courtship, but do not move bipedally.'b''",
+                "freq": 3,
+                "title": "Bipedalism",
+                "url": "https://en.wikipedia.org/wiki/Bipedalism"
+            },
+            {
+                "desc": "b'Stand-up comedy is a comic style in which a comedian performs in front of a live audience, usually speaking directly to them. The performer is commonly known as a comic, stand-up comic, stand-up comedian or simply a stand-up.[1] In stand-up comedy, the comedian usually recites a grouping of humorous stories, jokes and one-liners typically called a monologue, routine or act. Some stand-up comedians use props, music or magic tricks to \"enhance\" their acts. Stand-up comedy is often performed in comedy clubs, bars and pubs, nightclubs, neo-burlesques, colleges and theatres. Outside live performance, stand-up is often distributed commercially via television, DVD, CD and the internet.[1][2]'b''",
+                "freq": 2,
+                "title": "Stand-up comedy",
+                "url": "https://en.wikipedia.org/wiki/Stand-up_comedy"
+            },
+            {
+                "desc": "b'A television special (often TV special, or rarely \"television spectacular\") is a stand-alone television show which temporarily interrupts episodic programming normally scheduled for a given time slot. Specials have been produced which provide a full range of entertainment and informational value available via the television medium (news, drama, comedy, variety, cultural), in various formats (live television, documentary, studio production, animation, film), and in any viewing lengths (short films, theatrical films, miniseries, telethons).[1][2]'b''",
+                "freq": 2,
+                "title": "Television special",
+                "url": "https://en.wikipedia.org/wiki/Television_special"
+            }
+        ]
+    }
+]
