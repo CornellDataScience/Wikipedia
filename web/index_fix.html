@@ -8,11 +8,11 @@
 				position: fixed;
 				opacity:0;
 				width: 250px;
-				height: 200px;
+				height: 250px;
 				/* background: none repeat scroll 0 0 #D3D3D3; */
 				border: 1px solid #000000;
 				border-radius: 2px;
-				padding: 4px;
+				padding: 0 2%	;
 				/* text-align: center; */
 				font-size:1em;
 				font-family:sans-serif;
@@ -29,12 +29,14 @@
 										-1px -1px 2px #fff inset;
 				border-radius: 3px/6px;
 			}
+			.tooltip h4{
+				text-align:center;
+			}
 			.left {
 				width:70%;
 				float:left;
 				margin-left: 60px;
 			}
-
 			#right {
 				width:30%;
 				float:right;
@@ -45,8 +47,8 @@
 			.viz {
 				margin-left: 30px;
 				margin: 0 auto;
-				border-bottom:3px solid;
-				border-bottom-color:#000000;
+				border-bottom:3px dotted;
+				border-bottom-color:#ffffff;
 			}
 		</style>
 		<script type="text/javascript" src="https://d3js.org/d3.v4.min.js"></script>
@@ -63,10 +65,10 @@
 					<option value="Solid-state physics">Solid State Phsyics</option>
 					<option value="White Walker">While Walkers</option>
 				</select>
+				<input type="button" name="submit_id" id="btn_id" value="Submit by Id" onclick="submit_by_id()"/>
 			</fieldset>
 			<!-- <input type="submit" name="add" value="Visualize" /> -->
 			<!-- <a href="javascript: submitform()">Submit</a> -->
-			<input type="button" name="submit_id" id="btn_id" value="Submit by Id" onclick="submit_by_id()"/>
 		</form>
 	</div>
 	<div class="left">
@@ -118,8 +120,7 @@
 						.attr("height", diameter)
 						.attr("class", "bubble");
 				update(root[3],svg2,div);
-
-
+				d3.selectAll(".viz").style("border-bottom-color", "#000000")
 			}
 			//console.log(root);
 		});
@@ -162,15 +163,11 @@
 								div.html("<h4><a href='" + d.data.url+"' target='_blank'>" + d.data.title + "</a></h4>" +
                                     "<p>" + d.data.desc + "<p>");
 							})
+						.style("overflow-x", "hidden");
 				/*.on("mouseout", function(d){
 					div.transition().duration(200)
 						.style('opacity','0');
 					});*/
-
-			node.append("title")
-					.text(function(d) {
-							return d.title + ": " + d.freq;
-					});
 
 			node.append("circle")
 					.attr("r", function(d) {
@@ -188,7 +185,7 @@
 					})
 					.attr("font-family", "sans-serif")
 					.attr("font-size", function(d){
-							return d.r/5;
+							return d.r/7;
 					})
 					.attr("fill", "white");
 
@@ -200,12 +197,15 @@
 					})
 					.attr("font-family",  "Gill Sans", "Gill Sans MT")
 					.attr("font-size", function(d){
-							return d.r/5;
+							return d.r/7;
 					})
 					.attr("fill", "white");
 
 			d3.select(self.frameElement)
 					.style("height", diameter + "px");
+			d3.select("h5").text(function(d){
+				return d.title;
+			})
 		}
 	</script>
 </body>
