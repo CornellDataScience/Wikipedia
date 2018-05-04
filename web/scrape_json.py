@@ -8,7 +8,7 @@ import io
 MAX_DEPTH = 3
 STEM = "https://en.wikipedia.org"
 
-#filtering out only raw text from the html file
+#filters out the tag notation from any extracted text
 def visible(element):
     if element.parent.name in ['style', 'script', '[document]', 'head', 'title']:
         return False
@@ -18,7 +18,6 @@ def visible(element):
 
 #build the json entry for a singular page
 def read_page(page):
-    #if depth == -1: return
     print("reading page: " + page)
     page1 = requests.get(page)
     full_text = ""
@@ -33,23 +32,24 @@ def read_page(page):
         see_also = soup.find('span', id='See_also')
         title = str(soup.find('h1').getText())
         toc = soup.find("div", {"class": "toc"})
+        #will only take text from everything above the see also section
         for p in see_also.parent.previous_siblings:
-            alt = p.find('img')
+            alt = p.find('img') #won't consider image alt text
             if not alt and p.name == 'p':
-                full_text += str(p.getText())#.encode('utf-8', 'ignore'))
+                full_text += str(p.getText())
                 for a in p.find_all('a'):
                     if a['href'][:6] == "/wiki/": links.insert(0,a['href'])
+        #for the sake of speed, will also only take links from the description
         for p in toc.previous_siblings:
             if p.name == "p":
                 for a in p.find_all('a'):
                     if a['href'][:6] == "/wiki/": desc_links.insert(0,a['href'])
                 desc_text = str(p.getText().encode('utf-8', 'ignore')) + desc_text
+    #throws an AttributeError if the page isn't in the typical article format
+    # ex. could be a page to a page describing a picture
     except AttributeError:
         print("invalid page, skipping")
-    except KeyError:
-        pass
     filter(visible,full_text)
-    #print(title + full_text)
     page_dict = {'title': title, 'url': page, 'links': links,
         'text': full_text, 'desc_links': desc_links, 'desc_text':desc_text}
     return page_dict
@@ -67,7 +67,7 @@ def desc_1(root_page):
         json.dump(data, f,sort_keys=True, indent=4)
     f.close()
     print(doc_title)
-    return doc_title
+    return rt
 
 #read descriptions at depth 2
 #will only pull links from the intro paragraph to avoid pulling inordinate amounts of data
@@ -90,7 +90,7 @@ def desc_2(root_page):
     doc_title = "../data/" + root_page[30:] + "_2.json"
     with io.open(doc_title, 'w', encoding="utf-8") as f:
         json.dump(data, f,sort_keys=True, indent=4)
-        print("FINISHING")
+        print("FNISHED SCRAPING")
         return rt
 
 if __name__ == '__main__':
