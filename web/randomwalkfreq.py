@@ -75,8 +75,8 @@ def DiGraphRandomWalk(G, niters, depth, threshold, start_tag, weight=True):
 
 if __name__ == '__main__':
     # obtain graph of articles and perform random walks
-    G = makeGraph.make_prototype_graph().to_directed()
-    freqs = DiGraphRandomWalk(G, 100, 5, 0.3, 'Linear algebra', False)
+    G = makeGraph.make_prototype_graph("../data/Hevea_brasiliensis_2.json").to_directed()
+    freqs = DiGraphRandomWalk(G, 100, 5, 0.3, 'Hevea brasiliensis', False)
     # output list of frequencies
     print(freqs)
 

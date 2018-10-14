@@ -1,6 +1,6 @@
 import random
 import networkx as nx
-import makeGraph
+import makeGraph as mg
 import numpy as np
 import matplotlib.mlab as mlab
 import matplotlib.pyplot as plt
@@ -62,8 +62,8 @@ def DiGraphRandomWalk(G, niters, depth, threshold, start_tag, weight=True):
 
 if __name__ == '__main__':
     # obtain graph of articles and perform random walks
-    G = makeGraph.make_prototype_graph().to_directed()
-    path = DiGraphRandomWalk(G, 20, 10, 0.3, 'Linear algebra', True)
+    G = mg.make_prototype_graph("../data/Hevea_brasiliensis_2.json").to_directed()
+    path = DiGraphRandomWalk(G, 20, 10, 0.1, 'Hevea brasiliensis', True)
     # output paths taken
     print(path)
 

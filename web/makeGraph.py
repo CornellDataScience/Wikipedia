@@ -9,7 +9,7 @@ def make_prototype_graph(source):
     docs = sm.compute_similarity(source)
     G.add_edges_from(docs)
     pr = nx.pagerank(G)
-    nx.set_node_attributes(G, pr,"pagerank")
+    nx.set_node_attributes(G, "pagerank", pr)
     return G
 
 if __name__ == 'main':
