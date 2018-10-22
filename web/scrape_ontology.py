@@ -43,14 +43,14 @@ def get_pages(category):
     soup = BeautifulSoup(page.content, 'html.parser')
     mw_category = soup.select('#mw-pages .mw-category-group a')
     acc = [i.get_text() for i in mw_category]
-    key = soup.select('#mw-pages a[href*=Category:]')
+    key = soup.select('#mw-pages a[href*=Category:]') # key is a list of length 2
     while True:
         next_page = requests.get(STEM + key[-1]['href'])
         next_soup = BeautifulSoup(next_page.content, 'html.parser')
         next_mw_category = next_soup.select('#mw-pages .mw-category-group a')
         acc += [i.get_text() for i in next_mw_category]
         key = next_soup.select('#mw-pages a[href*=Category:]')
-        if key[-1].get_text() == 'previous page': # key is a list of length 2
+        if key[-1].get_text() == 'previous page': # no next pages any more
             break
     return acc
 
