@@ -1,6 +1,8 @@
 # Wikipedia
 
-**Members**: Jim Li (M.Eng '18), Linnea May (CS '21), Nikhil Saggi (CS '21), Xinqi Lyu (CS '20), Ziwei Gu (CS '21)
+**Past Members**: Jim Li (M.Eng '18), Linnea May (CS '21)
+
+**Current Members**: Ziwei Gu (CS/Math '21), Xinqi Lyu (CS '20), Nikhil Saggi (CS '21), Eric Sun (CS/Stats '20), Debasmita Bhattacharya (CS '21), Ellen Chen (CS '20)
 
 **Objective:** To model  the structure of knowledge on Wikipedia and provide recommendations for a path of learning based on a certain inputted topic. 
 
