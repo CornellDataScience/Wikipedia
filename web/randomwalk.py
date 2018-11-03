@@ -1,3 +1,4 @@
+from bisect import bisect_right
 import random
 import networkx as nx
 import makeGraph as mg
@@ -34,7 +35,18 @@ def DiGraphRandomWalk(G, niters, depth, threshold, start_tag, weight=True):
                 # Debugging
                 # print("Node: " + rand_node)
                 # for i in edges_threshold:
-                    # print(i)
+                    # print(i)        if len(k_set) > 0:
+                
+                # Weighted Randomization code
+                totals = []
+                running_total = 0
+
+                for i in xrange(0, len(edges_threshold)):
+                    running_total += edges_threshold[i]
+                    totals.append(running_total)
+
+                rand = random.random() * running_total
+                rand_edge = edges_threshold[bisect_right(totals, rand)]
 
 
                 path.append(rand_node)
