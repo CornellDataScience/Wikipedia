@@ -19,6 +19,24 @@ def DiGraphRandomWalk(G, niters, depth, threshold, start_tag, weight=True):
             path = []
             # perform random walk up to specified depth
             for j in range(depth):
+                #automated threshold value
+                edges = []
+                for node2 in G.successors(rand_node):
+                    edges.append(G[rand_node][node2]['similarity'])
+                #filter all values of 1 from list
+                edges = list(filter(lambda x: x < 0.99998, edges))
+                #max value
+                max_edge = max(edges)
+                threshold = max_edge * 0.1
+                #finding all edges above the threshold
+                edges_threshold = list(filter(lambda x: x >= max_edge * 0.1, edges))
+
+                # Debugging
+                # print("Node: " + rand_node)
+                # for i in edges_threshold:
+                    # print(i)
+
+
                 path.append(rand_node)
                 count = 0
                 # determine successor node
