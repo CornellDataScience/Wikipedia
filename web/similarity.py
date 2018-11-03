@@ -16,6 +16,8 @@ import sys
 import json
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.feature_extraction.text import TfidfVectorizer
+import io
+import pickle
 
 lst = []
 def compute_similarity(docs):
@@ -32,6 +34,7 @@ def compute_similarity(docs):
     # docs = re.sub(r"b'", "", docs)
     # docs = re.sub(r"(\\\ W)", "", docs)
     # docs = re.sub(r'\w*\d\w*', '', docs).split('\n')
+    topicname = docs[8:][:-5]
     file = json.load(open(docs))
     titles = []
     docs = []
@@ -82,6 +85,8 @@ def compute_similarity(docs):
 
     lst = list(map(lambda x: (x[0],x[1],{'similarity':x[2]}), lst))
     print("here is the list", lst)
+    with open('../data/{}_similarity.txt'.format(topicname), 'wb') as outfile:
+        pickle.dump(lst, outfile)
     return lst
 
 def tokenize_and_stem(text):
