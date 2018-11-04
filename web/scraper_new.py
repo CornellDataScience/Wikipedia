@@ -4,6 +4,9 @@ import sys
 STEM = "https://en.wikipedia.org"
 
 def get_pages(category):
+    """
+    This method returns a list of all page titles displayed in a "Category" page.
+    """
     page = requests.get(category)
     soup = BeautifulSoup(page.content, 'html.parser')
     mw_category = soup.select('#mw-pages .mw-category-group a')
@@ -66,9 +69,9 @@ def read_pages(links):
             title = soup.find('h1').getText() + "\n"
             for t in text:
                 if not t.find('img') and (t.name == 'p' or t.name == 'ul'):
-                    full_text += str(t.getText().replace('\n', '') + "\n")
+                    full_text += str(t.getText().replace('\n', ''))
             myFile.write(title)
-            myFile.write(full_text)
+            myFile.write(full_text + "\n")
         except AttributeError:
             print("invalid page, skipping")
 
