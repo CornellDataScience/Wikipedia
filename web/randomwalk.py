@@ -23,13 +23,8 @@ def DiGraphRandomWalk(G, niters, depth, start_tag, weight=True):
             path = []
             # perform random walk up to specified depth
             for j in range(depth):
-<<<<<<< HEAD
                 #automated threshold value
                 edges_nodes = {}
-=======
-                #testing code for automatic threshold value
-                edges = []
->>>>>>> a7433e40c43cb1c340c0a9a1ed604d5eb3e88101
                 for node2 in G.successors(rand_node):
                     edges_nodes[G[rand_node][node2]['similarity']] = node2
                 #filter all values of 1 from list
@@ -38,44 +33,35 @@ def DiGraphRandomWalk(G, niters, depth, start_tag, weight=True):
                 max_edge = max(list(edges_nodes.keys()))
                 threshold = max_edge * 0.1
                 #finding all edges above the threshold
-<<<<<<< HEAD
                 edges_threshold = {k:v for (k,v) in edges_nodes.items() if k >= threshold}
 
                 # Debugging
                 # print("Node: " + rand_node)
-                # for i in edges_threshold.keys():
+                # for i in list(edges_threshold.keys()):
                     # print(i)
-=======
-                edges_threshold = list(filter(lambda x: x >=threshold, edges))
-
-                # Debugging
-                # print("Node: " + rand_node)
-                # for i in edges_threshold:
-                    # print(i)        if len(k_set) > 0:
->>>>>>> a7433e40c43cb1c340c0a9a1ed604d5eb3e88101
 
                 # Weighted Randomization code
                 totals = []
                 running_total = 0
 
-<<<<<<< HEAD
                 for i in edges_threshold.keys():
                     running_total += i
-=======
-                for i in range(0, len(edges_threshold)):
-                    running_total += edges_threshold[i]
->>>>>>> a7433e40c43cb1c340c0a9a1ed604d5eb3e88101
                     totals.append(running_total)
-
-                rand = random.random() * running_total
-                rand_edge = list(edges_threshold.keys())[bisect_right(totals, rand)]
 
 
                 path.append(rand_node)
                 count = 0
-                node_neighbor = edges_threshold.get(rand_edge)
-                if len(list(G.successors(rand_node))) == 0:
-                    node_neighbor = "None"
+
+                while True:
+                    count = count + 1
+                    rand = random.random() * running_total
+                    rand_edge = list(edges_threshold.keys())[bisect_right(totals, rand)]
+                    node_neighbor = edges_threshold.get(rand_edge)
+                    if len(list(G.successors(rand_node))) == 0 or count > len(list(G.successors(rand_node))) * 50:
+                        node_neighbor = "None"
+                        break
+                    if G.node[node_neighbor]['pagerank'] >= G.node[rand_node]['pagerank']:
+                        break
 
                 # determine successor node
                 # while True:
@@ -118,8 +104,8 @@ def DiGraphRandomWalk(G, niters, depth, start_tag, weight=True):
 
 if __name__ == '__main__':
     # obtain graph of articles and perform random walks
-    G = mg.make_prototype_graph("../data/Linear algebra_2.json").to_directed()
-    path = DiGraphRandomWalk(G, 20, 10, 'Linear algebra', True)
+    G = mg.make_prototype_graph("../data/Hevea_brasiliensis_2.json").to_directed()
+    path = DiGraphRandomWalk(G, 20, 10, 'Hevea brasiliensis', True)
     # output paths taken
     print(path)
 
