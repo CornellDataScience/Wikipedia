@@ -104,8 +104,8 @@ def DiGraphRandomWalk(G, niters, depth, start_tag, weight=True):
 
 if __name__ == '__main__':
     # obtain graph of articles and perform random walks
-    G = mg.make_prototype_graph("../data/Hevea_brasiliensis_2.json").to_directed()
-    path = DiGraphRandomWalk(G, 20, 10, 'Hevea brasiliensis', True)
+    G = mg.make_prototype_graph("../data/Linear algebra_2.json").to_directed()
+    path = DiGraphRandomWalk(G, 20, 10, 'Linear algebra', True)
     # output paths taken
     print(path)
 
