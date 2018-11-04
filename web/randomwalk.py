@@ -1,11 +1,15 @@
+from bisect import bisect_right
 import random
 import networkx as nx
 import makeGraph as mg
 import numpy as np
 import matplotlib.mlab as mlab
 import matplotlib.pyplot as plt
+import sys
+sys.path.insert(0,'../pythonapp')
+import show
 
-def DiGraphRandomWalk(G, niters, depth, threshold, start_tag, weight=True):
+def DiGraphRandomWalk(G, niters, depth, start_tag, weight=True):
     # init a random node
     for i in G.nodes():
         if i == start_tag:
@@ -19,6 +23,35 @@ def DiGraphRandomWalk(G, niters, depth, threshold, start_tag, weight=True):
             path = []
             # perform random walk up to specified depth
             for j in range(depth):
+                #testing code for automatic threshold value
+                edges = []
+                for node2 in G.successors(rand_node):
+                    edges.append(G[rand_node][node2]['similarity'])
+                #filter all values of 1 from list
+                edges = list(filter(lambda x: x < 0.99998, edges))
+                #max value
+                max_edge = max(edges)
+                threshold = max_edge * 0.1
+                #finding all edges above the threshold
+                edges_threshold = list(filter(lambda x: x >=threshold, edges))
+
+                # Debugging
+                # print("Node: " + rand_node)
+                # for i in edges_threshold:
+                    # print(i)        if len(k_set) > 0:
+
+                # Weighted Randomization code
+                totals = []
+                running_total = 0
+
+                for i in range(0, len(edges_threshold)):
+                    running_total += edges_threshold[i]
+                    totals.append(running_total)
+
+                rand = random.random() * running_total
+                rand_edge = edges_threshold[bisect_right(totals, rand)]
+
+
                 path.append(rand_node)
                 count = 0
                 # determine successor node
@@ -62,15 +95,17 @@ def DiGraphRandomWalk(G, niters, depth, threshold, start_tag, weight=True):
 
 if __name__ == '__main__':
     # obtain graph of articles and perform random walks
-    G = mg.make_prototype_graph("../data/Hevea_brasiliensis_2.json").to_directed()
-    path = DiGraphRandomWalk(G, 20, 10, 0.1, 'Hevea brasiliensis', True)
+    G = mg.make_prototype_graph("../data/Linear algebra_2.json").to_directed()
+    path = DiGraphRandomWalk(G, 20, 10, 'Linear algebra', True)
     # output paths taken
     print(path)
 
+    show.graph(path)
+
     # generate list of edge weights
-    weights = []
-    for node1, node2 in G.edges():
-        weights.append(G[node1][node2]['similarity'])
-    # Display histogram of cosine similarity values
-    n, bins, patches = plt.hist(weights, 10, facecolor='blue', alpha=0.5)
-    plt.show()
+    # weights = []
+    # for node1, node2 in G.edges():
+    #     weights.append(G[node1][node2]['similarity'])
+    # # Display histogram of cosine similarity values
+    # n, bins, patches = plt.hist(weights, 10, facecolor='blue', alpha=0.5)
+    # plt.show()
