@@ -23,50 +23,59 @@ def DiGraphRandomWalk(G, niters, depth, start_tag, weight=True):
             path = []
             # perform random walk up to specified depth
             for j in range(depth):
-                #testing code for automatic threshold value
-                edges = []
+                #automated threshold value
+                edges_nodes = {}
                 for node2 in G.successors(rand_node):
-                    edges.append(G[rand_node][node2]['similarity'])
+                    edges_nodes[G[rand_node][node2]['similarity']] = node2
                 #filter all values of 1 from list
-                edges = list(filter(lambda x: x < 0.99998, edges))
+                edges_nodes = {k:v for (k,v) in edges_nodes.items() if k < 0.99998}
                 #max value
-                max_edge = max(edges)
+                max_edge = max(list(edges_nodes.keys()))
                 threshold = max_edge * 0.1
                 #finding all edges above the threshold
-                edges_threshold = list(filter(lambda x: x >=threshold, edges))
+                edges_threshold = {k:v for (k,v) in edges_nodes.items() if k >= threshold}
 
                 # Debugging
                 # print("Node: " + rand_node)
-                # for i in edges_threshold:
-                    # print(i)        if len(k_set) > 0:
+                # for i in list(edges_threshold.keys()):
+                    # print(i)
 
                 # Weighted Randomization code
                 totals = []
                 running_total = 0
 
-                for i in range(0, len(edges_threshold)):
-                    running_total += edges_threshold[i]
+                for i in edges_threshold.keys():
+                    running_total += i
                     totals.append(running_total)
-
-                rand = random.random() * running_total
-                rand_edge = edges_threshold[bisect_right(totals, rand)]
 
 
                 path.append(rand_node)
                 count = 0
-                # determine successor node
+
                 while True:
                     count = count + 1
-                    # end search if no successors exist or if the loop has executed (number of successors * 50) times
+                    rand = random.random() * running_total
+                    rand_edge = list(edges_threshold.keys())[bisect_right(totals, rand)]
+                    node_neighbor = edges_threshold.get(rand_edge)
                     if len(list(G.successors(rand_node))) == 0 or count > len(list(G.successors(rand_node))) * 50:
                         node_neighbor = "None"
                         break
-                    # chooses successor node at random
-                    node_neighbor = random.choice(list(G.successors(rand_node)))
-                    # leave the loop if an edge within an appropriate threshold is found and successor node has a higher or equal PageRank
-                    if G[rand_node][node_neighbor]['similarity'] > threshold and G.node[node_neighbor]['pagerank'] >= G.node[rand_node]['pagerank']:
+                    if G.node[node_neighbor]['pagerank'] >= G.node[rand_node]['pagerank']:
                         break
-                # breaks loop if the end of node path has been reached
+
+                # determine successor node
+                # while True:
+                #     count = count + 1
+                #     # end search if no successors exist or if the loop has executed (number of successors * 50) times
+                #     if len(list(G.successors(rand_node))) == 0 or count > len(list(G.successors(rand_node))) * 50:
+                #         node_neighbor = "None"
+                #         break
+                #     # chooses successor node at random
+                #     node_neighbor = random.choice(list(G.successors(rand_node)))
+                #     # leave the loop if an edge within an appropriate threshold is found and successor node has a higher or equal PageRank
+                #     if G[rand_node][node_neighbor]['similarity'] > threshold and G.node[node_neighbor]['pagerank'] >= G.node[rand_node]['pagerank']:
+                #         break
+                # # breaks loop if the end of node path has been reached
                 if node_neighbor == "None":
                     break
                 # update rand_node for next iteration
