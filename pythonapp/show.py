@@ -20,6 +20,4 @@ def graph(data):
         for i in range(len(rows)-1):
             dot.edge(rows[i], rows[i+1], constraint='false')
 
-    print("woops")
     dot.render('graph2.gv', view=True)
-    print("oops")
