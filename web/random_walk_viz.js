@@ -48,37 +48,41 @@ var drag = d3.drag()
     d.fy = null;
   });
 
-function set_text_color(){
-  d3.select("body").append('input')
-    .attr('type','checkbox')
-    .attr("class", ".pCheckbox")
-    .text("Path 1").style("color", "blue");
-  d3.selectAll(".pCheckbox").each(function(d){
-    cb = d3.select(this);
-    cb.append("svg")
-      .attr("width", 30)
-      .attr("height", 30)
-    .append("rect")
-      .attr("width", 30)
-      .attr("height", 30)
-      .style("color",color_setter(parseInt(cb.property("value"))-1));
-    cb.style("color", color_setter(parseInt(cb.property("value"))-1));
-  })
-}
+//TODO
+// function set_text_color(){
+//   d3.select("body").append('input')
+//     .attr('type','checkbox')
+//     .attr("class", ".pCheckbox")
+//     .text("Path 1").style("color", "blue");
+//   d3.selectAll(".pCheckbox").each(function(d){
+//     cb = d3.select(this);
+//     cb.append("svg")
+//       .attr("width", 30)
+//       .attr("height", 30)
+//     .append("rect")
+//       .attr("width", 30)
+//       .attr("height", 30)
+//       .style("color",color_setter(parseInt(cb.property("value"))-1));
+//     cb.style("color", color_setter(parseInt(cb.property("value"))-1));
+//   })
+// }
 
+//sets the color
 function color_setter(n) {
   var colors = ["#3366cc", "#dc3912", "#ff9900", "#109618", "#990099", "#0099c6", "#dd4477", "#66aa00", "#b82e2e", "#316395", "#994499", "#22aa99", "#aaaa11", "#6633cc", "#e67300", "#8b0707", "#651067", "#329262", "#5574a6", "#3b3eac"];
   return colors[n % colors.length];
 }
 
+//allowing user to select which graph to view
 d3.select(".sel_graph_button").on("click", select_graph);
-
+//the json file of the graph has to be labeled "topic_name_2_path" Ex:
 //Hevea_brasiliensis_2_path
 //Linear_algebra_2_path
 select_graph();
 function select_graph(){
   var json_name = d3.select("#dropdown").property("value");
   d3.json(json_name + "_2_path.json", function(data) {
+    d3.selectAll("tooltip").remove();
     d3.selectAll("marker").remove();
     d3.selectAll("path").remove();
     d3.selectAll("node").remove();
@@ -124,8 +128,9 @@ function update(graph){
       .attr("stroke", function(d) { return color_setter(d.path); })
       .attr("stroke-width", 2.3)
     .on("mouseover", function(d){
-      tipMouseOver(d, "Similarity: " + d.similarity +
-        "<br>Path: " + (d.path + 1));
+      tipMouseOver(d, "Similarity: " + (Math.round(d.similarity * 10000)/10000) +
+        "<br>Path: " + (d.path + 1) +
+        "<br>Step: " + (d.step + 1));
       d3.select(this).style("stroke-width", 4);
     })
     .on("mouseout", function(d){
@@ -157,7 +162,7 @@ function update(graph){
     .on("mouseover", function(d){
       var html = "Name: " + d.name + "<br>Paths: ";
       for(var i = 0; i < d.paths.length; i++){
-        if(i == 10) html = html + "<br>";
+        if(i % 10 == 0 && i != 0) html = html + "<br>";
         html = html + " " + (d.paths[i] + 1);
       }
       tipMouseOver(d, html);
@@ -170,22 +175,22 @@ function update(graph){
       })
     });
 
+  //simulating the graph
   simulate
     .nodes(graph.nodes)
     .force("link", d3.forceLink(graph.links))
     .force("charge", d3.forceManyBody().strength(-10))
     .force("center", d3.forceCenter(width/2, height/2))
     .force("collide", d3.forceCollide(function(d){
-      return d.id == source_node ? 60 : 30
+      return d.id == source_node ? 60 : 30 //spacing out the center node
     }));
   simulate.tick();
 
   drag(node); //enables ability to drag nodes
 
-  //Making text visible/not
+  //Making node text visible/not
   d3.select("#text_visible").on("change", updateText);
   updateText();
-
   function updateText(){
     node.append("text")
       .attr("dx", 12)
@@ -201,7 +206,7 @@ function update(graph){
   }
 
   //CHOOSING CERTAIN PATHS
-  set_text_color(); //Updates text color to their path
+  //TODO:  set_text_color(); //Updates text color to their path
   d3.selectAll(".pCheckbox").on("change", updateLinks);
   updateLinks();
   function updateLinks(){

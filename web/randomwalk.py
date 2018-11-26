@@ -32,7 +32,8 @@ def DiGraphRandomWalk(G, niters, depth, start_tag, weight=True):
             path = []
             # perform random walk up to specified depth
             for j in range(depth):
-                graph_path["nodes"][node_id[rand_node]]["paths"].append(i)
+                rand_node_paths = graph_path["nodes"][node_id[rand_node]]["paths"]
+                rand_node_paths.append(i) if (not (i in rand_node_paths)) else ""
 
                 #automated threshold value
                 edges_nodes = {}
@@ -67,13 +68,17 @@ def DiGraphRandomWalk(G, niters, depth, start_tag, weight=True):
                         node_neighbor = "None"
                         break
                     if G.node[node_neighbor]['pagerank'] >= G.node[rand_node]['pagerank']:
-                        graph_path["links"].append({"source":node_id[rand_node], "target":node_id[node_neighbor], "path":i, "similarity":G[rand_node][node_neighbor]['similarity']})
+                        graph_path["links"].append({"source":node_id[rand_node], "target":node_id[node_neighbor], "path":i, "step":j, "similarity":G[rand_node][node_neighbor]['similarity']})
                         break
 
                 if node_neighbor == "None":
                     break
                 # update rand_node for next iteration
                 rand_node = node_neighbor
+
+            rand_node_paths = graph_path["nodes"][node_id[rand_node]]["paths"]
+            rand_node_paths.append(i) if (not (i in rand_node_paths)) else ""
+
             # add the determined path to the list of visited paths
             visited_paths.append(path)
             rand_node = start_node
@@ -98,11 +103,11 @@ def DiGraphRandomWalk(G, niters, depth, start_tag, weight=True):
 
 if __name__ == '__main__':
     # obtain graph of articles and perform random walks
-    G = mg.make_prototype_graph("../data/Linear algebra_2.json").to_directed()
-    path, graph_path = DiGraphRandomWalk(G, 20, 10, 'Linear algebra', True)
+    G = mg.make_prototype_graph("../data/Hevea_brasiliensis_2.json").to_directed()
+    path, graph_path = DiGraphRandomWalk(G, 20, 10, 'Hevea brasiliensis', True)
     # output paths taken
     print(path)
-    with open("Linear_algebra_2_path.json", "w") as outfile:
+    with open("Hevea_brasiliensis_2_path.json", "w") as outfile:
         json.dump(graph_path, outfile)
 
     # show.graph(path)
