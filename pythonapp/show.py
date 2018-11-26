@@ -1,4 +1,6 @@
 from graphviz import Digraph
+import os
+os.environ["PATH"] += os.pathsep + 'C:/Users/Nikhil/Downloads/release/bin'
 
 #dot = Digraph(name='Wikipedia Hierarchy', comment='Created by WikInsite', engine='sfdp', format='png')
 def graph(data):
@@ -18,4 +20,6 @@ def graph(data):
         for i in range(len(rows)-1):
             dot.edge(rows[i], rows[i+1], constraint='false')
 
+    print("woops")
     dot.render('graph2.gv', view=True)
+    print("oops")
