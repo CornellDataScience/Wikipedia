@@ -88,9 +88,7 @@ function select_graph(){
     d3.selectAll("node").remove();
     d3.selectAll("circle").remove();
     d3.selectAll("text").remove();
-    simulate.stop();
-    simulate.tick();
-    simulate.restart();
+    simulate.alpha(0.5).restart();
     update(data);
   });
 }
