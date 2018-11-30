@@ -9,9 +9,18 @@ import sys
 sys.path.insert(0,'../pythonapp')
 import show
 
+import json
+
 def DiGraphRandomWalk(G, niters, depth, start_tag, weight=True):
+    graph_path = {"nodes":[], "links":[]}
+
     # init a random node
+    id = 0;
+    node_id = {}
     for i in G.nodes():
+        graph_path["nodes"].append({"name":i, "id":id, "paths":[]})
+        node_id[i] = id
+        id = id + 1
         if i == start_tag:
             start_node = i
     rand_node = start_node
@@ -23,6 +32,9 @@ def DiGraphRandomWalk(G, niters, depth, start_tag, weight=True):
             path = []
             # perform random walk up to specified depth
             for j in range(depth):
+                rand_node_paths = graph_path["nodes"][node_id[rand_node]]["paths"]
+                rand_node_paths.append(i) if (not (i in rand_node_paths)) else ""
+
                 #automated threshold value
                 edges_nodes = {}
                 for node2 in G.successors(rand_node):
@@ -35,17 +47,12 @@ def DiGraphRandomWalk(G, niters, depth, start_tag, weight=True):
                 #finding all edges above the threshold
                 edges_threshold = {k:v for (k,v) in edges_nodes.items() if k >= threshold}
 
-                # Debugging
-                # print("Node: " + rand_node)
-                # for i in list(edges_threshold.keys()):
-                    # print(i)
-
                 # Weighted Randomization code
                 totals = []
                 running_total = 0
 
-                for i in edges_threshold.keys():
-                    running_total += i
+                for k in edges_threshold.keys():
+                    running_total += k
                     totals.append(running_total)
 
 
@@ -61,25 +68,17 @@ def DiGraphRandomWalk(G, niters, depth, start_tag, weight=True):
                         node_neighbor = "None"
                         break
                     if G.node[node_neighbor]['pagerank'] >= G.node[rand_node]['pagerank']:
+                        graph_path["links"].append({"source":node_id[rand_node], "target":node_id[node_neighbor], "path":i, "step":j, "similarity":G[rand_node][node_neighbor]['similarity']})
                         break
 
-                # determine successor node
-                # while True:
-                #     count = count + 1
-                #     # end search if no successors exist or if the loop has executed (number of successors * 50) times
-                #     if len(list(G.successors(rand_node))) == 0 or count > len(list(G.successors(rand_node))) * 50:
-                #         node_neighbor = "None"
-                #         break
-                #     # chooses successor node at random
-                #     node_neighbor = random.choice(list(G.successors(rand_node)))
-                #     # leave the loop if an edge within an appropriate threshold is found and successor node has a higher or equal PageRank
-                #     if G[rand_node][node_neighbor]['similarity'] > threshold and G.node[node_neighbor]['pagerank'] >= G.node[rand_node]['pagerank']:
-                #         break
-                # # breaks loop if the end of node path has been reached
                 if node_neighbor == "None":
                     break
                 # update rand_node for next iteration
                 rand_node = node_neighbor
+
+            rand_node_paths = graph_path["nodes"][node_id[rand_node]]["paths"]
+            rand_node_paths.append(i) if (not (i in rand_node_paths)) else ""
+
             # add the determined path to the list of visited paths
             visited_paths.append(path)
             rand_node = start_node
@@ -100,16 +99,18 @@ def DiGraphRandomWalk(G, niters, depth, start_tag, weight=True):
             # add the determined path to the list of visited paths
             visited_paths.append(path)
             rand_node = start_node
-    return visited_paths
+    return visited_paths, graph_path
 
 if __name__ == '__main__':
     # obtain graph of articles and perform random walks
-    G = mg.make_prototype_graph("../data/Linear algebra_2.json").to_directed()
-    path = DiGraphRandomWalk(G, 20, 10, 'Linear algebra', True)
+    G = mg.make_prototype_graph("../data/Hevea_brasiliensis_2.json").to_directed()
+    path, graph_path = DiGraphRandomWalk(G, 20, 10, 'Hevea brasiliensis', True)
     # output paths taken
     print(path)
+    with open("Hevea_brasiliensis_2_path.json", "w") as outfile:
+        json.dump(graph_path, outfile)
 
-    show.graph(path)
+    # show.graph(path)
 
     # generate list of edge weights
     # weights = []
