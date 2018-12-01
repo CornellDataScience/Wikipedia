@@ -58,13 +58,25 @@ def get_links(page):
 
 # By far the fastest way to read wikipedia pages
 def read_pages(links):
-    file_name= "raw_data.txt"
+    dic = {}
+    file_name= "raw_data_1130.txt"
     myFile = open(file_name, 'a')
     for page in links:
         print("reading page: " + page)
         page1 = requests.get(STEM + '/wiki/' + page)
         try:
             soup = BeautifulSoup(page1.text, "html5lib")
+            # begin constructing dictionary
+            notes = soup.find('span', id='Notes')
+            for t in notes.parent.previous_siblings:
+                if t.name == 'p' or t.name == 'ul':
+                    for a in t.find_all('a'):
+                        if a['href'][:6] == '/wiki/' and a['class'] != 'mw-redirect':
+                            if a['href'][6:] in links:
+                                if a['href'][6:] in dic:
+                                    dic[a['href'][6:]] += 1
+                                else:
+                                    dic[a['href'][6:]] = 1
             text = soup.find_all('p')
             full_text = ""
             title = soup.find('h1').getText() + "\n"
@@ -75,6 +87,8 @@ def read_pages(links):
             myFile.write(full_text + "\n")
         except AttributeError:
             print("invalid page, skipping")
+    return dic
+
 
 if __name__ == '__main__':
     root_page = str(sys.argv[1])
@@ -82,5 +96,7 @@ if __name__ == '__main__':
     print('Relevant pages are as follows: ')
     print(links)
     print('Reading related ' + str(len(links)) + ' articles...')
-    read_pages(links)
+    titles_dict = read_pages(links)
     print('Successfully scraped all pages in the list!')
+    print('\n')
+    print(titles_dict)
