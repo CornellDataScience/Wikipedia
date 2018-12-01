@@ -37,8 +37,9 @@ def get_links(page):
         for t in notes.parent.previous_siblings:
             if t.name == 'p' or t.name == 'ul':
                 for a in t.find_all('a'):
-                    if a['href'][:6] == "/wiki/" and a['href'][6:] not in links:
+                    if a['href'][:6] == '/wiki/' and a['class'] != 'mw-redirect':
                         links.append(a['href'][6:])
+
         # Find links to category pages at the bottom of the current page
         category_links = []
         category = soup.find('div', id='mw-normal-catlinks')
