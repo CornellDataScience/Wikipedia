@@ -15,8 +15,8 @@ var tooltip = d3.select("body").append("div")
 
 var tipMouseOver = function(d, html) {
   tooltip.html(html)
-    .style("left", (d3.event.pageX + 10) + "px")
-    .style("top", (d3.event.pageY - 20) + "px");
+    .style("left", (d3.event.pageX + 20) + "px")
+    .style("top", (d3.event.pageY - 15) + "px");
   tooltip.transition()
     .duration(200)
     .style("opacity", 0.9);
@@ -153,8 +153,8 @@ function update(graph){
       else {return "gray";}
     })
     .attr("r", function(d){
-      if(d.id == source_node){ return 7; }
-      else {return 5; }
+      if(d.id == source_node){ return Math.min(d.paths.length,6) + 4; }
+      else {return Math.min(d.paths.length,6) + 3; }
     })
     .attr("stroke", "black")
     .on("mouseover", function(d){
@@ -164,12 +164,14 @@ function update(graph){
         html = html + " " + (d.paths[i] + 1);
       }
       tipMouseOver(d, html);
-      d3.select(this).attr("r", 8);
+      d3.select(this).style("cursor", "pointer");
+      d3.select(this).attr("r", Math.min(d.paths.length,6) + 4);
     })
     .on("mouseout", function(d){
       tipMouseOut();
+      d3.select(this).style("cursor", "");
       d3.select(this).attr("r", function(d){
-        if(d.id==source_node){ return 7;} else {return 5;}
+        if(d.id==source_node){ return Math.min(d.paths.length,6) + 4;} else {return Math.min(d.paths.length,6) + 3;}
       })
     });
 

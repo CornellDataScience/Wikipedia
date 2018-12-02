@@ -99,6 +99,7 @@ if __name__ == '__main__':
     # print(links)
     # print('Reading related ' + str(len(links)) + ' articles...')
     titles_dict = read_pages(links, page_title)
+    titles_dict = sorted(titles_dict.items(), key=lambda x: x[1], reverse=True)
     # print('Successfully scraped all pages in the list!')
     # print('\n')
     # print(titles_dict)
