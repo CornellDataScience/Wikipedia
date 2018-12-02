@@ -1,212 +1,91 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="utf-8">
-		<title>D3: A simple packed Bubble Chart</title>
-		<style type="text/css">
-			.tooltip{
-				position: fixed;
-				opacity:0;
-				width: 250px;
-				height: 250px;
-				/* background: none repeat scroll 0 0 #D3D3D3; */
-				border: 1px solid #000000;
-				border-radius: 2px;
-				padding: 0 2%	;
-				/* text-align: center; */
-				font-size:1em;
-				font-family:sans-serif;
-				right:10px;
-				top:50px;
-				word-wrap: break-word;
-				overflow-y: scroll;
-				margin-right: 50px;
-				margin-top: 50px;;
-				/* height: 80vh; */
-				background: #F2F2F2;
-				border: 1px solid #ccc;
-				box-shadow: 1px 1px 2px #fff inset,
-										-1px -1px 2px #fff inset;
-				border-radius: 3px/6px;
-			}
-			.tooltip h4{
-				text-align:center;
-			}
-			.left {
-				width:70%;
-				float:left;
-				margin-left: 60px;
-			}
-			#right {
-				width:30%;
-				float:right;
-				-webkit-border-radius: 0% 0% 100% 100% / 0% 0% 8px 8px;
-				-webkit-box-shadow: rgba(0, 0, 0,.30) 0 2px 3px;
-			}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<meta charset="utf-8">
+<style>
 
-			.viz {
-				margin-left: 30px;
-				margin: 0 auto;
-				border-bottom:3px dotted;
-				border-bottom-color:#ffffff;
-			}
-		</style>
-		<script type="text/javascript" src="https://d3js.org/d3.v4.min.js"></script>
-</head>
-<body>
-	<div>
-		<form id="add">
-			<fieldset>
-				<!-- <legend><span class="number"></span> New Country </legend> -->
-				<label>Keyword:</label>
-				<select name="continent" id="name" required>
-					<option disabled selected value> -- Select a Keyword -- </option>
-					<option value="Eigenvalues and eigenvectors">Eigenvalues</option>
-					<option value="Solid-state physics">Solid State Phsyics</option>
-					<option value="White Walker">While Walkers</option>
-				</select>
-				<input type="button" name="submit_id" id="btn_id" value="Submit by Id" onclick="submit_by_id()"/>
-			</fieldset>
-			<!-- <input type="submit" name="add" value="Visualize" /> -->
-			<!-- <a href="javascript: submitform()">Submit</a> -->
-		</form>
-	</div>
-	<div class="left">
-		<div id="div1" class="viz">
-		</div>
-		<div id="div2" class="viz">
-		</div>
-		<div id="div3" class="viz">
-		</div>
-	</div>
-	<div id="right">
-	</div>
-	<script type="text/javascript">
-	var root;
-	// Submit form with id function.
-	function submit_by_id() {
-		var name = document.getElementById("name").value;
-		name = name.concat("_web.json");
-		console.log(name);
-		d3.json(name, function(error,data){
-			console.log(error);
-			root = data;
-			if(root != undefined){
-				console.log(root);
-				var diameter = 600;
-				var color = d3.scaleOrdinal(d3.schemeCategory20);
-				// d3.selectAll("svg").exit().remove();
-				d3.selectAll("svg").remove();
-				var div = d3.select("#right").append("div")
-							.attr("id", "info")
-							.attr("class", "tooltip")
-							.style("opacity", 0);
 
-				var svg = d3.select("#div1")
-						.append("svg")
-						.attr("width", diameter)
-						.attr("height", diameter)
-						.attr("class", "bubble");
-				update(root[1],svg,div);
-				var svg1 = d3.select("#div2")
-						.append("svg")
-						.attr("width", diameter)
-						.attr("height", diameter)
-						.attr("class", "bubble");
-				update(root[2],svg1,div);
-				var svg2 = d3.select("#div3")
-						.append("svg")
-						.attr("width", diameter)
-						.attr("height", diameter)
-						.attr("class", "bubble");
-				update(root[3],svg2,div);
-				d3.selectAll(".viz").style("border-bottom-color", "#000000")
-			}
-			//console.log(root);
-		});
-	}
+.link {
+  fill: none;
+  stroke: #ccc;
+}
 
-		function update(source,s,div) {
-			var diameter = 600;
-			var color = d3.scaleOrdinal(d3.schemeCategory20);
-			var bubble = d3.pack(source)
-					.size([diameter, diameter])
-					.padding(1.5);
+.node text {
+  pointer-events: none;
+  font: 10px sans-serif;
+}
 
-			var nodes = d3.hierarchy(source)
-					.sum(function(d) { return d.freq; });
+.centered {
+  text-align: center;
+}
 
-			console.log(nodes);
-			// var div = d3.select("#info").remove("div");
-			// var div = d3.select("#right").append("div")
-			// 			.attr("id", "info")
-			// 			.attr("class", "tooltip")
-			// 			.style("opacity", 0);
-			var node = s.selectAll(".node")
-					.data(bubble(nodes).descendants())
-					.enter()
-					.filter(function(d){
-							return  !d.children
-					})
-					.append("g")
-					.attr("class", "node")
-					.attr("transform", function(d) {
-							return "translate(" + d.x + "," + d.y + ")";
-					})
-					.on('click',function(d){
+.tooltip {
+    position: absolute;
+    font-size: 13px;
+    width:  auto;
+    height: auto;
+    pointer-events: none;
+    background-color: white;
+}
 
-								div.transition().duration(200)
-									//.style('left',d3.event.pageX - 20 + "px")
-									//.style('top',d3.event.pageY + "px")
-									.style('opacity','1')
-									.style('display','inline-block')
-								div.html("<h4><a href='" + d.data.url+"' target='_blank'>" + d.data.title + "</a></h4>" +
-                                    "<p>" + d.data.desc + "<p>");
-							})
-						.style("overflow-x", "hidden");
-				/*.on("mouseout", function(d){
-					div.transition().duration(200)
-						.style('opacity','0');
-					});*/
+svg {
+  display:block;
+  margin:auto;
+}
 
-			node.append("circle")
-					.attr("r", function(d) {
-							return d.r;
-					})
-					.style("fill", function(d,i) {
-							return color(i);
-					});
+</style>
 
-			node.append("text")
-					.attr("dy", ".2em")
-					.style("text-anchor", "middle")
-					.text(function(d) {
-							return d.data.title.substring(0, d.r / 3);
-					})
-					.attr("font-family", "sans-serif")
-					.attr("font-size", function(d){
-							return d.r/7;
-					})
-					.attr("fill", "white");
+<html>
+  <body>
+    <div class = "card centered" width = "800" height = "900">
+    <h1>CDS Wiki-Insights RandomWalk Viz</h1>
+    <div>
+    <select id="dropdown">
+      <option value="Linear_algebra">Linear Algebra</option>
+      <option value="Hevea_brasiliensis">Hevea Brasiliensis</option>
+    </select>
+    <button type="button" class="sel_graph_button">Select Graph
+  </div>
 
-			node.append("text")
-					.attr("dy", "1.3em")
-					.style("text-anchor", "middle")
-					.text(function(d) {
-							return d.data.freq;
-					})
-					.attr("font-family",  "Gill Sans", "Gill Sans MT")
-					.attr("font-size", function(d){
-							return d.r/7;
-					})
-					.attr("fill", "white");
+    <form action="/action_page.php" method="get">
+    <input type="checkbox" id="text_visible" value="text"checked> Display Names of Nodes
 
-			d3.select(self.frameElement)
-					.style("height", diameter + "px");
-			d3.select("h5").text(function(d){
-				return d.title;
-			})
-		}
-	</script>
-</body>
+  <div id = "checkboxes">
+    <input type="checkbox" class="pCheckbox" id="path1" value="0"checked> Path 1
+    <input type="checkbox" class="pCheckbox" id="path2" value="1"checked> Path 2
+    <input type="checkbox" class="pCheckbox" id="path3" value="2"checked> Path 3
+    <input type="checkbox" class="pCheckbox" id="path4" value="3"checked> Path 4
+    <input type="checkbox" class="pCheckbox" id="path5" value="4"checked> Path 5
+    <input type="checkbox" class="pCheckbox" id="path6" value="5"checked> Path 6
+    <input type="checkbox" class="pCheckbox" id="path7" value="6"checked> Path 7
+    <input type="checkbox" class="pCheckbox" id="path8" value="7"checked> Path 8
+    <input type="checkbox" class="pCheckbox" id="path9" value="8"checked> Path 9
+    <input type="checkbox" class="pCheckbox" id="path10" value="9"checked> Path 10
+  </div>
+  <div>
+    <input type="checkbox" class="pCheckbox" id="path11" value="10"checked> Path 11
+    <input type="checkbox" class="pCheckbox" id="path12" value="11"checked> Path 12
+    <input type="checkbox" class="pCheckbox" id="path13" value="12"checked> Path 13
+    <input type="checkbox" class="pCheckbox" id="path14" value="13"checked> Path 14
+    <input type="checkbox" class="pCheckbox" id="path15" value="14"checked> Path 15
+    <input type="checkbox" class="pCheckbox" id="path16" value="15"checked> Path 16
+    <input type="checkbox" class="pCheckbox" id="path17" value="16"checked> Path 17
+    <input type="checkbox" class="pCheckbox" id="path18" value="17"checked> Path 18
+    <input type="checkbox" class="pCheckbox" id="path19" value="18"checked> Path 19
+    <input type="checkbox" class="pCheckbox" id="path20" value="19"checked> Path 20
+  </div>
+</form>
+
+  <div>
+    <button type="button" class="selAllCheckbox"> Select All Paths
+    <button type="button" class="selNoneCheckbox"> Deselct All Paths
+  </div>
+
+
+    <svg width="760" height="760"></svg>
+  </div>
+    <div id="vis-container"></div>
+  </body>
+
+  <script type="text/javascript" src="https://d3js.org/d3.v4.min.js"></script>
+  <script src="random_walk_viz.js"></script>
 </html>
