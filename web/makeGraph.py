@@ -8,7 +8,7 @@ def make_prototype_graph(source):
     G = nx.Graph()
     # will reuse similarity weights if they are already computed
     try:
-        docs = similarities.MatrixSimilarity.load('../../similarity_matrix_{}.mm'.format(source))
+        docs = similarities.MatrixSimilarity.load('../data/similarity_matrix_{}.mm'.format(source))
     except FileNotFoundError:
         m, d = sm.preprocess(source)
         docs = sm.create_similarity_matrix(m, d)
