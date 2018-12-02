@@ -37,7 +37,7 @@ def get_links(page):
         for t in notes.parent.previous_siblings:
             if t.name == 'p' or t.name == 'ul':
                 for a in t.find_all('a'):
-                    if a['href'][:6] == '/wiki/' and a['class'] != 'mw-redirect':
+                    if a['href'][:6] == '/wiki/' and not a.has_attr("class"):
                         links.append(a['href'][6:])
 
         # Find links to category pages at the bottom of the current page
@@ -71,7 +71,7 @@ def read_pages(links):
             for t in notes.parent.previous_siblings:
                 if t.name == 'p' or t.name == 'ul':
                     for a in t.find_all('a'):
-                        if a['href'][:6] == '/wiki/' and a['class'] != 'mw-redirect':
+                        if a['href'][:6] == '/wiki/' and not a.has_attr("class"):
                             if a['href'][6:] in links:
                                 if a['href'][6:] in dic:
                                     dic[a['href'][6:]] += 1
