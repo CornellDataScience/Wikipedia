@@ -57,10 +57,10 @@ def get_links(page):
         print("Failure in finding links")
 
 # By far the fastest way to read wikipedia pages
-def read_pages(links):
+def read_pages(links, fileName):
     dic = {}
-    file_name= "raw_data_1130.txt"
-    myFile = open(file_name, 'a')
+    # file_name= "raw_data_1130.txt"
+    myFile = open(fileName, 'a')
     for page in links:
         print("reading page: " + page)
         page1 = requests.get(STEM + '/wiki/' + page)
@@ -92,12 +92,14 @@ def read_pages(links):
 
 if __name__ == '__main__':
     root_page = str(sys.argv[1])
+    page_title = root_page.split("/")[-1]
+    print("title",page_title)
     links = get_links(root_page)
-    print('Relevant pages are as follows: ')
-    print(links)
-    print('Reading related ' + str(len(links)) + ' articles...')
-    titles_dict = read_pages(links)
+    # print('Relevant pages are as follows: ')
+    # print(links)
+    # print('Reading related ' + str(len(links)) + ' articles...')
+    titles_dict = read_pages(links, page_title)
     titles_dict = sorted(titles_dict.items(), key=lambda x: x[1], reverse=True)
-    print('Successfully scraped all pages in the list!')
-    print('\n')
-    print(titles_dict)
+    # print('Successfully scraped all pages in the list!')
+    # print('\n')
+    # print(titles_dict)
