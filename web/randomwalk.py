@@ -9,6 +9,7 @@ import sys
 sys.path.insert(0,'../pythonapp')
 import show
 
+
 def DiGraphRandomWalk(G, niters, depth, start_tag, weight=True):
     # init a random node
     for i in G.nodes():
@@ -102,7 +103,9 @@ def DiGraphRandomWalk(G, niters, depth, start_tag, weight=True):
             rand_node = start_node
     return visited_paths
 
+
 if __name__ == '__main__':
+
     # obtain graph of articles and perform random walks
     G = mg.make_prototype_graph("../data/Linear algebra_2.json").to_directed()
     path = DiGraphRandomWalk(G, 20, 10, 'Linear algebra', True)
