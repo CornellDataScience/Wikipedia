@@ -37,7 +37,7 @@ def preprocess(file_name):
     return doc_term_matrix, dictionary
 
 
-def create_similarity_matrix(doc_term_matrix, dictionary):
+def create_similarity_matrix(doc_term_matrix, dictionary, fileName):
     model_tfidf = TfidfModel(doc_term_matrix, id2word=dictionary, normalize=False)
     MmCorpus.serialize('./corpus_tfidf.mm', model_tfidf[doc_term_matrix], progress_cnt=100)
     corpus_tfidf = MmCorpus('./corpus_tfidf.mm') # Loading back the corpus file after applying tf-idf
@@ -49,11 +49,15 @@ def create_similarity_matrix(doc_term_matrix, dictionary):
     # Creating the similarity matrix with LSI model
     index = similarities.MatrixSimilarity(model_lsi[corpus_tfidf], num_features=len(dictionary)) # Applying LSI model to all vectors
 
-    index.save('./similarity_matrix.mm')
+    index.save('./similarity_matrix_' + fileName + '.mm')
 
     return index
 
 if __name__ == '__main__':
     file = str(sys.argv[1])
+    fileName = file.split('/')[-1]
+    titleName = fileName[0:fileName.index('_raw_data.txt')]
+    # name = file.split('/')[-1]
+    print(titleName)
     m, d = preprocess(file)
-    create_similarity_matrix(m, d)
+    create_similarity_matrix(m, d, titleName)
