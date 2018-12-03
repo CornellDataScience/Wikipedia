@@ -12,6 +12,8 @@ from gensim.models import TfidfModel, LsiModel
 
 def clean(doc):
     # remove stopwords and words that are too short
+    stop = set(stopwords.words('english')) # set of stopwords
+    lemma = WordNetLemmatizer()
     return [lemma.lemmatize(i, 'v') for i in word_tokenize(doc) if i not in stop and len(i) > 2]
 
 def preprocess(file_name):
