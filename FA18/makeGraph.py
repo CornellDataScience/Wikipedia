@@ -1,6 +1,6 @@
 import networkx as nx
 # import pandas as pd
-# import similarity_new as sm
+import similarity_new as sm
 # import pickle
 # from gensim import similarities
 # makes a graph with edges weights of cosine similarity
@@ -32,7 +32,7 @@ import networkx as nx
 #     return(G.to_directed())
 
 # makes a graph with edges weights of cosine similarity
-def make_prototype_graph(source, matrix):
+def make_prototype_graph(matrix, titles):
     G = nx.Graph()
     # add all nodes/edges, with similarity values from matrix
     ridx = 0
@@ -48,9 +48,9 @@ def make_prototype_graph(source, matrix):
     # titles = [names[i] for i in range(len(names)) if i % 2 == 0] # list of string titles
     # mapping = {i:name for i,name in enumerate(titles)}
 
-    G= nx.relabel_nodes(G,mapping)
+    G= nx.relabel_nodes(G,sm.create_mapping(titles))
     return(G.to_directed())
 
 
-if __name__ == 'main':
-    make_prototype_graph("Linear algebra")
+# if __name__ == 'main':
+#     make_prototype_graph("Linear algebra")

@@ -16,12 +16,22 @@ def clean(doc):
     lemma = WordNetLemmatizer()
     return [lemma.lemmatize(i, 'v') for i in word_tokenize(doc) if i not in stop and len(i) > 2]
 
-def preprocess(file_name):
+def read_data(file_name):
     docs = io.open(file_name, mode="r", encoding="utf-8", errors="ignore").read().split('\n') # list of strings
-    titles = [docs[i] for i in range(len(docs)) if i % 2 == 0] # list of string titles
-    contents = [docs[i] for i in range(len(docs)) if i % 2 == 1] # list of string contents
-    contents = list(map(lambda x: re.sub(r"\d+","",x), contents)) # remove all digits from text
+    titles_raw = [docs[i] for i in range(len(docs)) if i % 2 == 0] # list of string titles
+    contents_raw = [docs[i] for i in range(len(docs)) if i % 2 == 1] # list of string contents
+    titles = []
+    contents = []
+    for i in range(len(titles_raw)):
+        if contents_raw[i] != '':
+            titles.append(titles_raw[i])
+            contents.append(contents_raw[i])
+    titles = list(set(titles))
+    contents = list(set(contents))
+    return titles, contents
 
+
+def preprocess(contents):
     stop = set(stopwords.words('english')) # set of stopwords
     lemma = WordNetLemmatizer()
     cleaned = [clean(page.lower()) for page in contents]
@@ -37,6 +47,9 @@ def preprocess(file_name):
     doc_term_matrix = [dictionary.doc2bow(doc) for doc in cleaned]
 
     return doc_term_matrix, dictionary
+
+def create_mapping(titles):
+    return {i:name for i,name in enumerate(titles)}
 
 
 def create_similarity_matrix(doc_term_matrix, dictionary):
@@ -55,11 +68,14 @@ def create_similarity_matrix(doc_term_matrix, dictionary):
 
     return index
 
-if __name__ == '__main__':
-    file = str(sys.argv[1])
-    fileName = file.split('/')[-1]
-    titleName = fileName[0:fileName.index('_raw_data.txt')]
-    # name = file.split('/')[-1]
-    print(titleName)
-    m, d = preprocess(file)
-    create_similarity_matrix(m, d)
+
+
+# if __name__ == '__main__':
+#     file = str(sys.argv[1])
+#     fileName = file.split('/')[-1]
+#     titleName = fileName[0:fileName.index('_raw_data.txt')]
+#     # name = file.split('/')[-1]
+#     print(titleName)
+#     t, c = read_data(file)
+#     m, d = preprocess(c)
+#     create_similarity_matrix(m, d)

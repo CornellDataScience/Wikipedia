@@ -13,7 +13,6 @@ import json
 
 def DiGraphRandomWalk(G, niters, depth, start_tag, inlinks, downstream):
     graph_path = {"nodes":[], "links":[]}
-
     # init a random node
     id = 0;
     node_id = {}
