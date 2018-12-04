@@ -60,7 +60,7 @@ def get_links(page):
 def read_pages(links, fileName):
     dic = {}
     # file_name= "raw_data_1130.txt"
-    myFile = open('../data/' + fileName + '_raw_data.txt', 'a')
+    myFile = open('../data/' + fileName + '_raw_data.txt', 'w', encoding="utf-8")
     for page in links:
         print("reading page: " + page)
         page1 = requests.get(STEM + '/wiki/' + page)
