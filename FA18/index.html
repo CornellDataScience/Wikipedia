@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>WikiInsights</title>
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+</head>
+
+<body>
+
+  <script type="text/javascript">
+    var w = 2000;
+    var h = 2000;
+    var linkDistance = 500;
+    var lineColor = "#938162"
+    var textColor = "#000"
+
+    var colors = d3.scale.category10();
+
+    var dataset = {"nodes": [{"name": "Dynamical system", "cluster": 5, "inlinks": 5}, {"name": "Hilbert space", "cluster": 6, "inlinks": 5}, {"name": "Integral", "cluster": 3, "inlinks": 1}, {"name": "Inner product space", "cluster": 0, "inlinks": 3}, {"name": "Partial differential equation", "cluster": 7, "inlinks": 3}, {"name": "Matrix calculus", "cluster": 5, "inlinks": 2}, {"name": "System", "cluster": 2, "inlinks": 3}, {"name": "Chaos theory", "cluster": 4, "inlinks": 2}, {"name": "Linear algebra", "cluster": 2, "inlinks": 0}, {"name": "Three-dimensional space", "cluster": 3, "inlinks": 3}, {"name": "Fourier series", "cluster": 1, "inlinks": 1}, {"name": "Equation", "cluster": 1, "inlinks": 5}, {"name": "Mathematics", "cluster": 8, "inlinks": 2}, {"name": "Giuseppe Peano", "cluster": 3, "inlinks": 1}, {"name": "Finite element method", "cluster": 5, "inlinks": 5}, {"name": "Manifold", "cluster": 1, "inlinks": 3}, {"name": "Map (mathematics)", "cluster": 2, "inlinks": 1}, {"name": "Function space", "cluster": 8, "inlinks": 10}, {"name": "Row and column vectors", "cluster": 6, "inlinks": 5}, {"name": "Banach space", "cluster": 2, "inlinks": 7}, {"name": "Integral equation", "cluster": 1, "inlinks": 1}, {"name": "Norm (mathematics)", "cluster": 7, "inlinks": 10}, {"name": "Mathematical analysis", "cluster": 9, "inlinks": 6}, {"name": "Taylor series", "cluster": 2, "inlinks": 1}, {"name": "Transformation matrix", "cluster": 8, "inlinks": 2}, {"name": "Outline of physical science", "cluster": 0, "inlinks": 1}, {"name": "Euclidean vector", "cluster": 2, "inlinks": 3}, {"name": "Vector space", "cluster": 5, "inlinks": 10}, {"name": "Linear system", "cluster": 1, "inlinks": 4}, {"name": "Mathematical model", "cluster": 5, "inlinks": 1}, {"name": "Calculus of variations", "cluster": 3, "inlinks": 4}, {"name": "Algebraic equation", "cluster": 1, "inlinks": 2}, {"name": "Soliton", "cluster": 8, "inlinks": 1}, {"name": "Matrix (mathematics)", "cluster": 2, "inlinks": 5}, {"name": "Surface (topology)", "cluster": 3, "inlinks": 1}, {"name": "Functional (mathematics)", "cluster": 8, "inlinks": 1}, {"name": "Topological space", "cluster": 1, "inlinks": 2}, {"name": "Analytic geometry", "cluster": 1, "inlinks": 1}, {"name": "Orthonormal basis", "cluster": 5, "inlinks": 2}, {"name": "Morphism", "cluster": 7, "inlinks": 1}, {"name": "Scalar multiplication", "cluster": 2, "inlinks": 5}, {"name": "Sparse matrix", "cluster": 6, "inlinks": 3}, {"name": "Poland", "cluster": 6, "inlinks": 1}, {"name": "Linear map", "cluster": 8, "inlinks": 3}, {"name": "Metric (mathematics)", "cluster": 3, "inlinks": 2}, {"name": "Eigenvalues and eigenvectors", "cluster": 4, "inlinks": 3}, {"name": "Origin (mathematics)", "cluster": 1, "inlinks": 1}, {"name": "Matrix addition", "cluster": 6, "inlinks": 1}, {"name": "Nonlinear system", "cluster": 4, "inlinks": 4}, {"name": "Functional analysis", "cluster": 0, "inlinks": 7}, {"name": "Higher-order function", "cluster": 2, "inlinks": 1}, {"name": "Function composition", "cluster": 1, "inlinks": 1}, {"name": "Stefan Banach", "cluster": 4, "inlinks": 1}, {"name": "Dimension (vector space)", "cluster": 0, "inlinks": 3}, {"name": "Topology", "cluster": 6, "inlinks": 1}, {"name": "Space (mathematics)", "cluster": 0, "inlinks": 5}, {"name": "Linearization", "cluster": 9, "inlinks": 5}, {"name": "Scalar (mathematics)", "cluster": 6, "inlinks": 4}, {"name": "Science", "cluster": 7, "inlinks": 1}, {"name": "Geodesic", "cluster": 5, "inlinks": 2}], "edges": [{"id": 0, "source": 8, "target": 21, "iters": 2}, {"id": 1, "source": 21, "target": 17, "iters": 2}, {"id": 2, "source": 17, "target": 53, "iters": 1}, {"id": 3, "source": 53, "target": 55, "iters": 1}, {"id": 4, "source": 55, "target": 49, "iters": 2}, {"id": 5, "source": 49, "target": 38, "iters": 1}, {"id": 6, "source": 38, "target": 19, "iters": 2}, {"id": 7, "source": 19, "target": 39, "iters": 1}, {"id": 8, "source": 39, "target": 17, "iters": 1}, {"id": 9, "source": 8, "target": 56, "iters": 2}, {"id": 10, "source": 56, "target": 48, "iters": 1}, {"id": 11, "source": 48, "target": 45, "iters": 1}, {"id": 12, "source": 45, "target": 26, "iters": 1}, {"id": 13, "source": 26, "target": 21, "iters": 1}, {"id": 14, "source": 21, "target": 19, "iters": 1}, {"id": 15, "source": 19, "target": 55, "iters": 2}, {"id": 16, "source": 49, "target": 54, "iters": 1}, {"id": 17, "source": 8, "target": 49, "iters": 2}, {"id": 18, "source": 49, "target": 1, "iters": 1}, {"id": 19, "source": 1, "target": 22, "iters": 2}, {"id": 20, "source": 22, "target": 22, "iters": 1}, {"id": 21, "source": 22, "target": 2, "iters": 1}, {"id": 22, "source": 2, "target": 22, "iters": 1}, {"id": 23, "source": 22, "target": 10, "iters": 1}, {"id": 24, "source": 10, "target": 22, "iters": 1}, {"id": 25, "source": 22, "target": 14, "iters": 1}, {"id": 26, "source": 8, "target": 3, "iters": 2}, {"id": 27, "source": 3, "target": 55, "iters": 1}, {"id": 28, "source": 55, "target": 21, "iters": 1}, {"id": 29, "source": 21, "target": 49, "iters": 2}, {"id": 30, "source": 49, "target": 35, "iters": 1}, {"id": 31, "source": 35, "target": 11, "iters": 1}, {"id": 32, "source": 11, "target": 14, "iters": 2}, {"id": 33, "source": 14, "target": 14, "iters": 1}, {"id": 34, "source": 14, "target": 4, "iters": 2}, {"id": 35, "source": 8, "target": 53, "iters": 1}, {"id": 36, "source": 53, "target": 26, "iters": 1}, {"id": 37, "source": 26, "target": 18, "iters": 2}, {"id": 38, "source": 18, "target": 24, "iters": 1}, {"id": 39, "source": 24, "target": 24, "iters": 1}, {"id": 40, "source": 24, "target": 45, "iters": 1}, {"id": 41, "source": 45, "target": 48, "iters": 1}, {"id": 42, "source": 48, "target": 32, "iters": 1}, {"id": 43, "source": 32, "target": 11, "iters": 1}, {"id": 44, "source": 8, "target": 17, "iters": 1}, {"id": 45, "source": 17, "target": 21, "iters": 2}, {"id": 46, "source": 21, "target": 1, "iters": 1}, {"id": 47, "source": 1, "target": 30, "iters": 1}, {"id": 48, "source": 30, "target": 11, "iters": 1}, {"id": 49, "source": 4, "target": 31, "iters": 1}, {"id": 50, "source": 31, "target": 11, "iters": 1}, {"id": 51, "source": 8, "target": 9, "iters": 1}, {"id": 52, "source": 9, "target": 46, "iters": 1}, {"id": 53, "source": 46, "target": 37, "iters": 1}, {"id": 54, "source": 37, "target": 59, "iters": 1}, {"id": 55, "source": 59, "target": 30, "iters": 1}, {"id": 56, "source": 30, "target": 51, "iters": 1}, {"id": 57, "source": 51, "target": 30, "iters": 1}, {"id": 58, "source": 30, "target": 22, "iters": 1}, {"id": 59, "source": 22, "target": 23, "iters": 1}, {"id": 60, "source": 56, "target": 7, "iters": 1}, {"id": 61, "source": 7, "target": 12, "iters": 1}, {"id": 62, "source": 12, "target": 52, "iters": 1}, {"id": 63, "source": 52, "target": 13, "iters": 1}, {"id": 64, "source": 13, "target": 42, "iters": 1}, {"id": 65, "source": 42, "target": 58, "iters": 1}, {"id": 66, "source": 58, "target": 25, "iters": 1}, {"id": 67, "source": 25, "target": 12, "iters": 1}, {"id": 68, "source": 8, "target": 1, "iters": 1}, {"id": 69, "source": 22, "target": 20, "iters": 1}, {"id": 70, "source": 20, "target": 31, "iters": 1}, {"id": 71, "source": 31, "target": 48, "iters": 1}, {"id": 72, "source": 48, "target": 0, "iters": 1}, {"id": 73, "source": 0, "target": 27, "iters": 2}, {"id": 74, "source": 27, "target": 57, "iters": 1}, {"id": 75, "source": 57, "target": 21, "iters": 2}, {"id": 76, "source": 17, "target": 44, "iters": 2}, {"id": 77, "source": 44, "target": 27, "iters": 1}, {"id": 78, "source": 27, "target": 49, "iters": 1}, {"id": 79, "source": 49, "target": 43, "iters": 1}, {"id": 80, "source": 43, "target": 16, "iters": 1}, {"id": 81, "source": 16, "target": 50, "iters": 1}, {"id": 82, "source": 50, "target": 30, "iters": 1}, {"id": 83, "source": 8, "target": 33, "iters": 1}, {"id": 84, "source": 33, "target": 18, "iters": 2}, {"id": 85, "source": 18, "target": 33, "iters": 2}, {"id": 86, "source": 18, "target": 41, "iters": 2}, {"id": 87, "source": 41, "target": 41, "iters": 1}, {"id": 88, "source": 41, "target": 5, "iters": 1}, {"id": 89, "source": 5, "target": 18, "iters": 1}, {"id": 90, "source": 8, "target": 28, "iters": 1}, {"id": 91, "source": 28, "target": 28, "iters": 1}, {"id": 92, "source": 28, "target": 6, "iters": 1}, {"id": 93, "source": 6, "target": 0, "iters": 1}, {"id": 94, "source": 27, "target": 45, "iters": 1}, {"id": 95, "source": 45, "target": 17, "iters": 1}, {"id": 96, "source": 17, "target": 36, "iters": 1}, {"id": 97, "source": 36, "target": 19, "iters": 1}, {"id": 98, "source": 8, "target": 27, "iters": 2}, {"id": 99, "source": 27, "target": 40, "iters": 1}, {"id": 100, "source": 40, "target": 40, "iters": 3}, {"id": 101, "source": 40, "target": 17, "iters": 1}, {"id": 102, "source": 17, "target": 57, "iters": 1}, {"id": 103, "source": 57, "target": 40, "iters": 1}, {"id": 104, "source": 40, "target": 27, "iters": 1}, {"id": 105, "source": 27, "target": 21, "iters": 1}, {"id": 106, "source": 49, "target": 21, "iters": 1}, {"id": 107, "source": 21, "target": 27, "iters": 1}, {"id": 108, "source": 27, "target": 9, "iters": 1}, {"id": 109, "source": 9, "target": 1, "iters": 1}, {"id": 110, "source": 1, "target": 27, "iters": 1}, {"id": 111, "source": 27, "target": 36, "iters": 1}, {"id": 112, "source": 8, "target": 0, "iters": 1}, {"id": 113, "source": 0, "target": 28, "iters": 1}, {"id": 114, "source": 28, "target": 56, "iters": 1}, {"id": 115, "source": 56, "target": 6, "iters": 1}, {"id": 116, "source": 6, "target": 56, "iters": 1}, {"id": 117, "source": 56, "target": 0, "iters": 1}, {"id": 118, "source": 0, "target": 7, "iters": 1}, {"id": 119, "source": 7, "target": 29, "iters": 1}, {"id": 120, "source": 29, "target": 6, "iters": 1}, {"id": 121, "source": 49, "target": 55, "iters": 1}, {"id": 122, "source": 55, "target": 1, "iters": 1}, {"id": 123, "source": 1, "target": 17, "iters": 1}, {"id": 124, "source": 44, "target": 17, "iters": 1}, {"id": 125, "source": 21, "target": 3, "iters": 1}, {"id": 126, "source": 3, "target": 57, "iters": 2}, {"id": 127, "source": 8, "target": 19, "iters": 2}, {"id": 128, "source": 19, "target": 19, "iters": 1}, {"id": 129, "source": 55, "target": 15, "iters": 1}, {"id": 130, "source": 15, "target": 15, "iters": 1}, {"id": 131, "source": 15, "target": 59, "iters": 1}, {"id": 132, "source": 59, "target": 15, "iters": 1}, {"id": 133, "source": 15, "target": 34, "iters": 1}, {"id": 134, "source": 34, "target": 9, "iters": 1}, {"id": 135, "source": 21, "target": 53, "iters": 1}, {"id": 136, "source": 53, "target": 38, "iters": 1}, {"id": 137, "source": 19, "target": 17, "iters": 1}, {"id": 138, "source": 17, "target": 17, "iters": 1}, {"id": 139, "source": 17, "target": 43, "iters": 1}, {"id": 140, "source": 8, "target": 43, "iters": 1}, {"id": 141, "source": 43, "target": 33, "iters": 1}, {"id": 142, "source": 33, "target": 5, "iters": 1}, {"id": 143, "source": 5, "target": 27, "iters": 1}, {"id": 144, "source": 27, "target": 26, "iters": 1}, {"id": 145, "source": 41, "target": 33, "iters": 1}, {"id": 146, "source": 33, "target": 47, "iters": 1}, {"id": 147, "source": 19, "target": 27, "iters": 1}, {"id": 148, "source": 27, "target": 0, "iters": 1}, {"id": 149, "source": 0, "target": 11, "iters": 1}, {"id": 150, "source": 11, "target": 56, "iters": 1}, {"id": 151, "source": 56, "target": 28, "iters": 1}, {"id": 152, "source": 28, "target": 48, "iters": 1}, {"id": 153, "source": 48, "target": 4, "iters": 1}, {"id": 154, "source": 4, "target": 14, "iters": 1}]};
+      // nodes: [{
+      //     name: "Adam",
+      //     cluster: 0,
+      //     inlinks: 0
+      //   },
+      //   {
+      //     name: "Bob",
+      //     cluster: 3,
+      //     inlinks: 4
+      //   },
+      //   {
+      //     name: "Carrie",
+      //     cluster: 4,
+      //     inlinks: 2
+      //   },
+      //   {
+      //     name: "Donovan",
+      //     cluster: 4,
+      //     inlinks: 5
+      //   },
+      //   {
+      //     name: "Edward",
+      //     cluster: 2,
+      //     inlinks: 3
+      //   },
+      //   {
+      //     name: "Felicity",
+      //     cluster: 3,
+      //     inlinks: 7
+      //   },
+      //   {
+      //     name: "George",
+      //     cluster: 3,
+      //     inlinks: 0
+      //   },
+      //   {
+      //     name: "Hannah",
+      //     cluster: 2,
+      //     inlinks: 1
+      //   },
+      //   {
+      //     name: "Iris",
+      //     cluster: 3,
+      //     inlinks: 5
+      //   },
+      //   {
+      //     name: "Jerry",
+      //     cluster: 4,
+      //     inlinks: 5
+      //   }
+      // ],
+      // edges: [{
+      //     id: 0,
+      //     source: 0,
+      //     target: 1,
+      //     iters: 4
+      //   },
+      //   {
+      //     id: 1,
+      //     source: 0,
+      //     target: 2,
+      //     iters: 2
+      //   },
+      //   {
+      //     id: 2,
+      //     source: 0,
+      //     target: 3,
+      //     iters: 5
+      //   },
+      //   {
+      //     id: 3,
+      //     source: 0,
+      //     target: 4,
+      //     iters: 2
+      //   },
+      //   {
+      //     id: 4,
+      //     source: 1,
+      //     target: 5,
+      //     iters: 6
+      //   },
+      //   {
+      //     id: 5,
+      //     source: 2,
+      //     target: 5,
+      //     iters: 1
+      //   },
+      //   {
+      //     id: 6,
+      //     source: 3,
+      //     target: 4,
+      //     iters: 1
+      //   },
+      //   {
+      //     id: 7,
+      //     source: 5,
+      //     target: 8,
+      //     iters: 3
+      //   },
+      //   {
+      //     id: 8,
+      //     source: 5,
+      //     target: 9,
+      //     iters: 2
+      //   },
+      //   {
+      //     id: 9,
+      //     source: 6,
+      //     target: 7,
+      //     iters: 1
+      //   },
+      //   {
+      //     id: 10,
+      //     source: 7,
+      //     target: 8,
+      //     iters: 2
+      //   },
+      //   {
+      //     id: 11,
+      //     source: 8,
+      //     target: 9,
+      //     iters: 3
+      //   }
+      // ]
+
+    var svg = d3.select("body").append("svg").attr({
+      "width": w,
+      "height": h
+    });
+
+    var force = d3.layout.force()
+      .nodes(dataset.nodes)
+      .links(dataset.edges)
+      .size([w, h])
+      .linkDistance([linkDistance])
+      .charge([-500])
+      .theta(0.1)
+      .gravity(0.05)
+      .start();
+
+    var edges = svg.selectAll("line")
+      .data(dataset.edges)
+      .enter()
+      .append("line")
+      .attr("id", function(d, i) {
+        return 'edge' + i
+      })
+      .attr('marker-end', function(d) {
+        return 'url(#arrowhead_' + d.id + ')'
+      })
+      .style("stroke", lineColor)
+      .style("stroke-width", function(d) {
+        return d.iters;
+      })
+      .style("pointer-events", "none");
+
+    var nodes = svg.selectAll("circle")
+      .data(dataset.nodes)
+      .enter()
+      .append("circle")
+      .attr("id", function(d) {
+        return 'node' + d
+      })
+      .attr("r", function(d) {
+        return d.inlinks * 2 + 8;
+      })
+      .style("fill", function(d) {
+        return colors(d.cluster);
+      })
+      .style("stroke", "#fff")
+      .style("stroke-width", "4")
+      .call(force.drag);
+
+    var nodelabels = svg.selectAll(".nodelabel")
+      .data(dataset.nodes)
+      .enter()
+      .append("text")
+      .attr({
+        "x": function(d) {
+          return d.x;
+        },
+        "y": function(d) {
+          return d.y;
+        },
+        "class": "nodelabel",
+        "stroke": textColor,
+        "fill": textColor
+      })
+      .text(function(d) {
+        return d.name;
+      })
+      .style('font-family', 'sans-serif');
+
+    var edgepaths = svg.selectAll(".edgepath")
+      .append('path');
+
+    var edgelabels = svg.selectAll(".edgelabel")
+      .append('text');
+
+    var arrowMarkers = svg.selectAll('defs')
+      .data(dataset.edges)
+      .enter()
+      .append('marker')
+      .attr({
+        'viewBox': '-0 -5 10 10',
+        'markerWidth': 5,
+        'markerHeight': 5,
+        'refY': 0,
+        'orient': 'auto',
+        'xoverflow': 'visible'
+      })
+      .attr('id', function(d) {
+        return 'arrowhead_' + d.id;
+      })
+      .attr('refX', function(d) {
+        return (160/Math.pow(d.iters,.8));
+      })
+      // function(d) {
+      //   switch (d.iters) {
+      //     case 1:
+      //       refx = 43;
+      //       break;
+      //     case 2:
+      //       refx = 25.5;
+      //       break;
+      //     case 3:
+      //       refx = 20;
+      //       break;
+      //     case 4:
+      //       refx = 17;
+      //       break;
+      //     case 5:
+      //       refx = 15;
+      //       break;
+      //     default:
+      //       refx = 14;
+      //       break;
+      //   }
+      //   return refx;
+      // })
+      .append('svg:path')
+      .attr('d', 'M 0,-5 L 10 ,0 L 0,5')
+      .attr('fill', lineColor)
+      .attr('stroke', lineColor)
+      .attr('stroke-width', 0);
+
+    force.on("tick", function() {
+      edges.attr({
+        "x1": function(d) {
+          return d.source.x;
+        },
+        "y1": function(d) {
+          return d.source.y;
+        },
+        "x2": function(d) {
+          return d.target.x;
+        },
+        "y2": function(d) {
+          return d.target.y;
+        }
+      });
+
+      nodes.attr({
+        "cx": function(d) {
+          return d.x;
+        },
+        "cy": function(d) {
+          return d.y;
+        }
+      })
+
+      nodelabels.attr("x", function(d) {
+          return d.x + 20;
+        })
+        .attr("y", function(d) {
+          return d.y;
+        });
+
+      // arrowMarkers.attr("refX", function(d) {
+      //   var e = document.getElementById("edge" + d.id);
+      //   var a = (Math.pow(
+      //     Math.pow(e.x2['baseVal']['value'] - e.x1['baseVal']['value'], 2) +
+      //     Math.pow(e.y2['baseVal']['value'] - e.y1['baseVal']['value'], 2), 0.5) / 2);
+      //   console.log(a);
+      //   return a;
+      // })
+    });
+  </script>
+</body>
+
+</html>
