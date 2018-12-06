@@ -1,15 +1,12 @@
 from bisect import bisect_right
 import random
-import networkx as nx
 import makeGraph as mg
-import numpy as np
-import matplotlib.mlab as mlab
 import matplotlib.pyplot as plt
+import json
 import sys
 sys.path.insert(0,'../pythonapp')
 import show
 
-import json
 
 def DiGraphRandomWalk(G, niters, depth, start_tag, inlinks, downstream):
     graph_path = {"nodes":[], "links":[]}
@@ -24,7 +21,6 @@ def DiGraphRandomWalk(G, niters, depth, start_tag, inlinks, downstream):
             start_node = i
     rand_node = start_node
     visited_paths = []
-
 
     # run simulation niters times
     for i in range(niters):
@@ -66,13 +62,12 @@ def DiGraphRandomWalk(G, niters, depth, start_tag, inlinks, downstream):
                 if len(list(G.successors(rand_node))) == 0 or count > len(list(G.successors(rand_node))) * 50:
                     node_neighbor = "None"
                     break
-                # if G.node[node_neighbor]['pagerank'] >= G.node[rand_node]['pagerank']:
                 if inlinks[rand_node] >= inlinks[node_neighbor]:
                     if downstream:
                         graph_path["links"].append({"source":node_id[rand_node], "target":node_id[node_neighbor], "path":i, "step":j, "similarity":G[rand_node][node_neighbor]['similarity']})
                         break
                 else:
-                    if upstream:
+                    if not downstream:
                         graph_path["links"].append({"source":node_id[rand_node], "target":node_id[node_neighbor], "path":i, "step":j, "similarity":G[rand_node][node_neighbor]['similarity']})
                         break
 

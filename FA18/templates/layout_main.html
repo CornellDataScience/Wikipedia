@@ -1,0 +1,30 @@
+<html>
+
+<head>
+  <title>WikiInsights</title>
+  <h1>Topic Model Generator</h1>
+</head>
+
+<body>
+  <h3>Load a preloaded page</h3>
+  <form action="/network/" method="post">
+    <form>
+      <input type="radio" name="graph" value="none" checked> None<br>
+      <input type="radio" name="graph" value="linalg"> Linear algebra<br>
+      <input type="radio" name="graph" value="hevea"> Hevea brasiliensis<br>
+      <input type="submit" value="Generate">
+    </form>
+  </form>
+  <h3>Load a custom page</h3>
+  <form action="/network/" method="post">
+    Source Topic:<br>
+    <form>
+      <input type="text" name="topicName"></input><br>
+      <input type="radio" name="direction" value="upstream" checked> Upstream<br>
+      <input type="radio" name="direction" value="downstream"> Downstream<br>
+      <input type="submit" value="Generate">
+    </form>
+  </form>
+</body>
+
+</html>
