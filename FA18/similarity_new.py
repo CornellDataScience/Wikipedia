@@ -1,6 +1,7 @@
 import io
 import re
 import sys
+from operator import itemgetter
 from nltk.corpus import stopwords
 from nltk.stem.wordnet import WordNetLemmatizer
 from nltk import word_tokenize
@@ -8,6 +9,7 @@ from gensim import corpora
 from gensim.corpora import MmCorpus
 from gensim import similarities
 from gensim.models import TfidfModel, LsiModel
+from gensim.models.ldamodel import LdaModel as Lda
 
 
 def clean(doc):
@@ -48,6 +50,18 @@ def preprocess(contents):
 
     return doc_term_matrix, dictionary
 
+
+def cluster(doc_term_matrix, num, word_dict):
+    ldamodel = Lda(doc_term_matrix, num_topics=num, id2word = word_dict)
+    doc_topics = ldamodel.get_document_topics(doc_term_matrix, minimum_probability=0.20) # needs tuning
+    result = [[] for i in range(num)]
+    for k,topic in enumerate(doc_topics):
+        # Some articles do not have a topic
+        if topic:
+            topic.sort(key = itemgetter(1), reverse=True)
+            result[topic[0][0]].append(k)
+    return [map(lambda x: titles[x], result[k]) for k in len(result)]
+
 def create_mapping(titles):
     return {i:name for i,name in enumerate(titles)}
 
@@ -67,6 +81,8 @@ def create_similarity_matrix(doc_term_matrix, dictionary):
     # index.save('./similarity_matrix_' + fileName + '.mm')
 
     return index
+
+
 
 
 

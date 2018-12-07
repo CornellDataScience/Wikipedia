@@ -21,6 +21,8 @@ def all(root_page, downstream):
     # titles, contents = sm.read_data('../data/' + page_title + '_raw_data.txt')
     titles, contents = sm.read_data('../topic_modeling_wikipedia/raw_data.txt')
     doc_term_matrix, vocabulary = sm.preprocess(contents)
+    clusters = sm.cluster(doc_term_matrix, 15, vocabulary)
+    print(clusters)
     sim_matrix = sm.create_similarity_matrix(doc_term_matrix, vocabulary)
 
     # STEP 3: create graph weighted with similarity values
