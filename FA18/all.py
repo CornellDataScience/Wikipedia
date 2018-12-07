@@ -14,6 +14,8 @@ if __name__ == '__main__':
     # titles_dict = sorted(titles_dict.items(), key=lambda x: x[1], reverse=True)
     titles, contents = sm.read_data('../data/' + page_title + '_raw_data.txt')
     doc_term_matrix, vocabulary = sm.preprocess(contents)
+    clusters = sm.cluster(doc_term_matrix, 15, vocabulary)
+    print(clusters)
     sim_matrix = sm.create_similarity_matrix(doc_term_matrix, vocabulary)
     G = mg.make_prototype_graph(sim_matrix, titles)
     path, graph_path = rw.DiGraphRandomWalk(G, 20, 10, 0, {}, True)
