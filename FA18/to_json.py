@@ -1,8 +1,8 @@
-import json
-import random
+import all
+
 
 ''' Converts random walk lists and cluster data into json format. '''
-def store_paths(paths):
+def store_paths(paths, clusters):
     inlinks = {}
     dataset = {}
     nodelist = []
@@ -25,7 +25,9 @@ def store_paths(paths):
     for n in nodeskey.keys():
         node = {}
         node['name'] = n
-        node['cluster'] = random.randint(0, 9)  # TODO: update cluster
+        for c in range(len(clusters)):
+            if n in clusters[c]:
+                node['cluster'] = c
         if n in inlinks:
             node['inlinks'] = inlinks[n]
         else:
@@ -59,6 +61,7 @@ def store_paths(paths):
 
 
 if __name__ == '__main__':
-    paths = [['Linear algebra', 'Norm (mathematics)', 'Function space', 'Dimension (vector space)', 'Space (mathematics)', 'Functional analysis', 'Orthonormal basis', 'Banach space', 'Morphism', 'Function space'], ['Linear algebra', 'Linearization', 'Nonlinear system', 'Eigenvalues and eigenvectors', 'Euclidean vector', 'Norm (mathematics)', 'Banach space', 'Space (mathematics)', 'Functional analysis', 'Topology'], ['Linear algebra', 'Functional analysis', 'Hilbert space', 'Mathematical analysis', 'Mathematical analysis', 'Integral', 'Mathematical analysis', 'Fourier series', 'Mathematical analysis', 'Finite element method'], ['Linear algebra', 'Inner product space', 'Space (mathematics)', 'Norm (mathematics)', 'Functional analysis', 'Functional (mathematics)', 'Equation', 'Finite element method', 'Finite element method', 'Partial differential equation'], ['Linear algebra', 'Dimension (vector space)', 'Euclidean vector', 'Row and column vectors', 'Transformation matrix', 'Transformation matrix', 'Eigenvalues and eigenvectors', 'Nonlinear system', 'Soliton', 'Equation'], ['Linear algebra', 'Function space', 'Norm (mathematics)', 'Hilbert space', 'Calculus of variations', 'Equation', 'Finite element method', 'Partial differential equation', 'Algebraic equation', 'Equation'], ['Linear algebra', 'Three-dimensional space', 'Origin (mathematics)', 'Analytic geometry', 'Geodesic', 'Calculus of variations', 'Function composition', 'Calculus of variations', 'Mathematical analysis', 'Taylor series'], ['Linear algebra', 'Linearization', 'Chaos theory', 'Mathematics', 'Stefan Banach', 'Giuseppe Peano', 'Poland', 'Science', 'Outline of physical science', 'Mathematics'], ['Linear algebra', 'Hilbert space', 'Mathematical analysis', 'Integral equation', 'Algebraic equation', 'Nonlinear system', 'Dynamical system', 'Vector space', 'Scalar (mathematics)', 'Norm (mathematics)'], ['Linear algebra', 'Norm (mathematics)', 'Function space', 'Metric (mathematics)', 'Vector space', 'Functional analysis', 'Linear map', 'Map (mathematics)', 'Higher-order function', 'Calculus of variations']]
+    # paths = [['Hevea brasiliensis', 'Angle', 'Tabebuia ochracea', 'Kielmeyera coriacea', 'Avocado', 'Brazil', 'Avocado', 'Brazil', 'Ormosia nobilis', 'Heah Joo Seang'], ['Hevea brasiliensis', 'Henry Wickham (explorer)', 'Hymenaea courbaril', 'Amazon rubber boom', 'Mesoamerican ballgame', 'Malaysia', 'Mesoamerican ballgame', 'Spondias mombin', 'Malaysia', 'Brazil'], ['Hevea brasiliensis', 'Avocado', 'Manaus', 'Angle', 'Attalea maripa', 'Brazil', 'Tabebuia ochracea', 'Malaysia', 'Attalea maripa', 'Manaus'], ['Hevea brasiliensis', 'South Asia', 'Henry Wickham (explorer)', 'South Asia', 'Pouteria caimito', 'Copernicia prunifera', 'Attalea maripa', 'Angle', 'Copernicia prunifera', 'Attalea maripa'], ['Hevea brasiliensis', 'Tabebuia ochracea', 'Avocado', 'Tabebuia ochracea', 'Avocado', 'Tabebuia ochracea', 'Manaus', 'Spondias mombin', 'Kielmeyera coriacea', 'Manaus'], ['Hevea brasiliensis', 'Copernicia prunifera', 'Manaus', 'Copernicia prunifera', 'Angle', 'Tabebuia ochracea', 'Ormosia nobilis', 'Avocado', 'Pouteria caimito', 'Brazil'], ['Hevea brasiliensis', 'Amazon rubber boom', 'Manaus', 'Angle', 'Clusia alata', 'Natural rubber', 'Brazil', 'Tabebuia ochracea', 'India', 'Manaus'], ['Hevea brasiliensis', 'South Asia', 'Clusia alata', 'Potato', 'Angle', 'Pouteria caimito', 'Clusia alata', 'Anadenanthera peregrina var. falcata', 'Natural rubber', 'Hymenaea courbaril'], ['Hevea brasiliensis', 'Brazil', 'Tabebuia ochracea', 'Anadenanthera peregrina var. falcata', 'Avocado', 'Pouteria caimito', 'Brazil', 'Spondias mombin', 'Malaysia', 'Pouteria caimito'], ['Hevea brasiliensis', 'Hymenaea courbaril', 'Attalea maripa', 'Brazil', 'Avocado', 'Brazil', 'Amazon rubber boom', 'Brazil', 'Copernicia prunifera', 'Potato']]
 
-    print(store_paths(paths))
+    paths, clusters = all.all('https://en.wikipedia.org/wiki/Linear_algebra', True)
+    print(store_paths(paths, clusters))
