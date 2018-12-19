@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import random
 import networkx as nx
 import sys
-sys.path.insert(0,'../pythonapp')
+sys.path.insert(0, '../pythonapp')
 import show
 
 '''
@@ -28,6 +28,7 @@ def hyperbolicity(G, niters, degree):
         total_dist_sum += dist_sum
     return(total_dist_sum/(niters*((degree*(degree-1))/2)))
 
+
 '''
 Converts random walk output into a networkx graph.
 '''
@@ -44,8 +45,9 @@ def make_rw_graph(paths):
     for path in paths:
         G.add_nodes_from(path)
         for n in range(len(path))[1:]:
-            G.add_edge(path[n-1],path[n])
+            G.add_edge(path[n-1], path[n])
     return(G)
+
 
 '''
 Returns a value representing the average degree of loop occurence in a set of random walks.
@@ -80,6 +82,7 @@ def loops(visited_paths):
     except ZeroDivisionError:
         return 0
 
+
 '''
 Same as loops except outputted value is higher for larger loops. Do not use.
 '''
@@ -95,6 +98,7 @@ def loops_old(visited_paths):
         return score/len(visited_paths)/sum([i*(i+1)/2 for i in range(1, len(visited_paths[0]))])
     except ZeroDivisionError:
         return 0
+
 
 if __name__ == '__main__':
     # # graph with nodes [F,G,H,I] all having distances = diameter
