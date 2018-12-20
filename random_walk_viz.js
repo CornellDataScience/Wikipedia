@@ -173,6 +173,9 @@ function update(graph){
       d3.select(this).attr("r", function(d){
         if(d.id==source_node){ return Math.min(d.paths.length,6) + 4;} else {return Math.min(d.paths.length,6) + 3;}
       })
+    .on("click", function(d){
+      window.location.assign("http://en.wikipedia.org/wiki/"+d.name, '_blank');
+    })
     });
 
   //simulating the graph
