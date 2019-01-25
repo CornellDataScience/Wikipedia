@@ -1,6 +1,4 @@
 from graphviz import Digraph
-import os
-os.environ["PATH"] += os.pathsep + 'C:/Users/Nikhil/Downloads/release/bin'
 
 #dot = Digraph(name='Wikipedia Hierarchy', comment='Created by WikInsite', engine='sfdp', format='png')
 def graph(data):
