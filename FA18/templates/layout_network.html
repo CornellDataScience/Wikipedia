@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>WikiInsights</title>
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+</head>
+
+<body>
+  <form action="/" method="get">
+    <input type="submit" value="Go back">
+  </form>
+  Scroll around and drag nodes to explore the network. Hover over an article to see {{direction}} articles. Double click an article to open its corresponding Wikipedia page.</br>
+  <script type="text/javascript">
+    var w = 1500;
+    var h = 1500;
+    var linkDistance = 500;
+    var lineColor = "#938162"
+    var textColor = "#000"
+    var edgesToChangeBack = [];
+    var nodesToChangeBack = [];
+    var colors = d3.scale.category10();
+
+    var dataset = {{network_json|tojson|safe}}
+
+    var svg = d3.select("body").append("svg").attr({
+      "width": w,
+      "height": h
+    });
+
+    var force = d3.layout.force()
+      .nodes(dataset.nodes)
+      .links(dataset.edges)
+      .size([w, h])
+      .linkDistance([linkDistance])
+      .charge([-500])
+      .theta(0.1)
+      .gravity(0.05)
+      .start();
+
+    var edges = svg.selectAll("line")
+      .data(dataset.edges)
+      .enter()
+      .append("line")
+      .attr("id", function(d, i) {
+        return 'edge' + i
+      })
+      .attr('marker-end', function(d) {
+        return 'url(#arrowhead_' + d.id + ')'
+      })
+      .style("stroke", lineColor)
+      .style("stroke-width", function(d) {
+        return Math.pow(d.iters, 1.8);
+      })
+      .style("pointer-events", "none");
+
+    var nodes = svg.selectAll("circle")
+      .data(dataset.nodes)
+      .enter()
+      .append("circle")
+      .attr("id", function(d) {
+        return 'node' + d
+      })
+      .attr("r", function(d) {
+        return d.inlinks * 2 + 8;
+      })
+      .style("fill", function(d) {
+        return colors(d.cluster);
+      })
+      .style("stroke", "#fff")
+      .style("stroke-width", "4")
+      .call(force.drag)
+      .on("mouseover", function(d) {
+        highlightGraphNode(d, true, this);
+      })
+      .on("mouseout", function(d) {
+        highlightGraphNode(d, false, this);
+      })
+      .on("dblclick", function(d) {
+        window.open('https://en.wikipedia.org/wiki/' + d.name.replace(" ","_"));
+      });
+
+    function highlightGraphNode(node, on) {
+      if (on) {
+        nodeOI = nodes[0][node['index']];
+        nodeOI.style.fill= '#000';
+        nodeOI.style.stroke= 'red';
+        var i;
+        for (i=0; i<83; i++) {
+          var edgeOI = edges[0][i];
+          if (edgeOI['__data__']['source']['index'] == node['index']) {
+            targetNodeOI = nodes[0][edgeOI['__data__']['target']['index']];
+            targetNodeOI.style.fill= '#000';
+            targetNodeOI.style.stroke= 'red';
+            edgeOI.style.stroke= 'red';
+            arrowMarkers[0][i].style.fill= 'red';
+            nodesToChangeBack.push(targetNodeOI);
+            edgesToChangeBack.push(i);
+          }
+        }
+      } else {
+        nodes[0][node['index']].style.fill= colors(node['cluster']);
+        nodes[0][node['index']].style.stroke= '#fff';
+        var i;
+        for (i=0; i<nodesToChangeBack.length; i++) {
+          nodesToChangeBack[i].style.fill= colors(nodesToChangeBack[i]['__data__']['cluster']);
+          nodesToChangeBack[i].style.stroke= '#fff';
+        }
+        for (i=0; i<edgesToChangeBack.length; i++) {
+          edges[0][edgesToChangeBack[i]].style.stroke= lineColor;
+          arrowMarkers[0][edgesToChangeBack[i]].style.fill= lineColor;
+        }
+      }
+    }
+
+    var nodelabels = svg.selectAll(".nodelabel")
+      .data(dataset.nodes)
+      .enter()
+      .append("text")
+      .attr({
+        "x": function(d) {
+          return d.x;
+        },
+        "y": function(d) {
+          return d.y;
+        },
+        "class": "nodelabel",
+      })
+      .attr("stroke", function(d) {
+        if (d['name'] == '{{topic_name}}') {
+          return 'red';
+        } else {
+          return textColor;
+        }
+      })
+      .attr("fill", function(d) {
+        if (d['name'] == '{{topic_name}}') {
+          return 'red';
+        } else {
+          return textColor;
+        }
+      })
+      .text(function(d) {
+        return d.name;
+      })
+      .style('font-family', 'sans-serif');
+
+    var edgepaths = svg.selectAll(".edgepath")
+      .append('path');
+
+    var edgelabels = svg.selectAll(".edgelabel")
+      .append('text');
+
+    var arrowMarkers = svg.selectAll('defs')
+      .data(dataset.edges)
+      .enter()
+      .append('marker')
+      .attr({
+        'viewBox': '-0 -5 10 10',
+        'markerWidth': 5,
+        'markerHeight': 5,
+        'refY': 0,
+        'orient': 'auto',
+        'xoverflow': 'visible'
+      })
+      .attr('id', function(d) {
+        return 'arrowhead_' + d.id;
+      })
+      .attr('refX', function(d) {
+        return (160 / Math.pow(d.iters, .8));
+      })
+      // function(d) {
+      //   switch (d.iters) {
+      //     case 1:
+      //       refx = 43;
+      //       break;
+      //     case 2:
+      //       refx = 25.5;
+      //       break;
+      //     case 3:
+      //       refx = 20;
+      //       break;
+      //     case 4:
+      //       refx = 17;
+      //       break;
+      //     case 5:
+      //       refx = 15;
+      //       break;
+      //     default:
+      //       refx = 14;
+      //       break;
+      //   }
+      //   return refx;
+      // })
+      .append('svg:path')
+      .attr('d', 'M 0,-5 L 10 ,0 L 0,5')
+      .attr('fill', lineColor)
+      .attr('stroke', lineColor)
+      .attr('stroke-width', 0);
+
+    force.on("tick", function() {
+      edges.attr({
+        "x1": function(d) {
+          return d.source.x;
+        },
+        "y1": function(d) {
+          return d.source.y;
+        },
+        "x2": function(d) {
+          return d.target.x;
+        },
+        "y2": function(d) {
+          return d.target.y;
+        }
+      });
+
+      nodes.attr({
+        "cx": function(d) {
+          return d.x;
+        },
+        "cy": function(d) {
+          return d.y;
+        }
+      })
+
+      nodelabels.attr("x", function(d) {
+          return d.x + 20;
+        })
+        .attr("y", function(d) {
+          return d.y;
+        });
+    });
+  </script>
+</body>
+
+</html>
